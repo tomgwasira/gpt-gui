@@ -76,8 +76,14 @@ class MainWindow(QMainWindow):
     def update_plot(self):
         s = pg.ptime.time()
         self.line1.setData(self.V1_buffer)
+        QApplication.processEvents()
+
         self.line2.setData(self.V2_buffer)
+        QApplication.processEvents()
+        
         self.line3.setData(self.V3_buffer)
+        QApplication.processEvents()
+        
         e = pg.ptime.time()
         print("Plot time: %0.2f sec" % (e-s))
 
