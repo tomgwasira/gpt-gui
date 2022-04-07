@@ -203,12 +203,12 @@
      </property>
      <property name="icon">
       <iconset>
-       <normaloff>../img/plot-info.png</normaloff>../img/plot-info.png</iconset>
+       <normaloff>../img/ruler.png</normaloff>../img/ruler.png</iconset>
      </property>
      <property name="iconSize">
       <size>
-       <width>17</width>
-       <height>21</height>
+       <width>20</width>
+       <height>20</height>
       </size>
      </property>
     </widget>
