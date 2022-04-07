@@ -1,6 +1,6 @@
 import sys
 from PyQt5 import QtCore, QtWidgets, QtGui
-from PyQt5.QtCore import QThread
+from PyQt5.QtCore import QThread, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic
 from pyqtgraph import PlotWidget
@@ -19,16 +19,34 @@ class MainWindow(QMainWindow):
         x = np.linspace(0, 100, 101)
         y = np.ones(101)
 
-        self.plotGraphicsView.plot(x, y)
-
         # TODO: Set icon
         # self.setWindowIcon(QtGui.QIcon('im.png'))
+
+        # Initialise data buffers
+        self.V1_buffer = []
+        self.V2_buffer = []
+        self.V3_buffer = []
+        self.I1_buffer = []
+        self.I2_buffer = []
+        self.I3_buffer = []
+
+        self.plotGraphicsView.plot(self.V1_buffer)
+        self.plotGraphicsView.plot(self.V2_buffer)
+        self.plotGraphicsView.plot(self.V3_buffer)
+
 
         # -------------
         # QThread setup
         # -------------
         # Create worker objects
-        self.server = TcpServer()
+        self.server = TcpServer(
+                                V1_buffer=self.V1_buffer,
+                                V2_buffer=self.V2_buffer,
+                                V3_buffer=self.V3_buffer,
+                                I1_buffer=self.I1_buffer,
+                                I2_buffer=self.I2_buffer,
+                                I3_buffer=self.I3_buffer,
+                            )
 
         # Create QThread objects
         self.receiveThread = QThread()
@@ -37,14 +55,27 @@ class MainWindow(QMainWindow):
         self.server.moveToThread(self.receiveThread)
 
         # Connect thread signals
-        self.receiveThread.started.connect(self.server.receive)
-        self.server.dataReadyToPlot.connect(self.updatePlot)
+        self.receiveThread.started.connect(self.server.run_server)
 
         # Start threads
         self.receiveThread.start()
 
-    def updatePlot(self):
-        print("Signal to update received")
+        # ------------
+        # QTimer setup
+        # ------------
+        # Create timers
+        self.plot_timer = QTimer()
+
+        # Connect timer signals
+        self.plot_timer.timeout.connect(self.update_plot)
+
+        # Start timers
+        self.plot_timer.start(100)
+
+    def update_plot(self):
+        self.plotGraphicsView.plot(self.V1_buffer)
+        self.plotGraphicsView.plot(self.V2_buffer)
+        self.plotGraphicsView.plot(self.V3_buffer)
 
 
 if __name__ == "__main__":
