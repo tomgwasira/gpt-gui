@@ -308,7 +308,7 @@
    <sender>line1CheckBox</sender>
    <signal>clicked(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onLine1CheckBoxClicked(bool)</slot>
+   <slot>onLine1CheckBoxClickedHistoryPlot(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>710</x>
@@ -324,7 +324,7 @@
    <sender>line2CheckBox</sender>
    <signal>clicked(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onLine2CheckBoxClicked(bool)</slot>
+   <slot>onLine2CheckBoxClickedHistoryPlot(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>710</x>
@@ -340,7 +340,7 @@
    <sender>line3CheckBox</sender>
    <signal>clicked(bool)</signal>
    <receiver>MainWindow</receiver>
-   <slot>onLine3CheckBoxClicked(bool)</slot>
+   <slot>onLine3CheckBoxClickedHistoryPlot(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>710</x>
@@ -358,8 +358,8 @@
   <slot>onHistoryButtonClicked(bool)</slot>
   <slot>zoomIn()</slot>
   <slot>zoomOut()</slot>
-  <slot>onLine1CheckBoxClicked(bool)</slot>
-  <slot>onLine2CheckBoxClicked(bool)</slot>
-  <slot>onLine3CheckBoxClicked(bool)</slot>
+  <slot>onLine1CheckBoxClickedHistoryPlot(bool)</slot>
+  <slot>onLine2CheckBoxClickedHistoryPlot(bool)</slot>
+  <slot>onLine3CheckBoxClickedHistoryPlot(bool)</slot>
  </slots>
 </ui>
