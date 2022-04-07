@@ -31,9 +31,10 @@ class MainWindow(QMainWindow):
         self.I2_buffer = []
         self.I3_buffer = []
 
-        self.line1 = self.plotGraphicsView.plot(self.V1_buffer, skipFiniteCheck=True)
-        self.line2 = self.plotGraphicsView.plot(self.V2_buffer, skipFiniteCheck=True)
-        self.line3 = self.plotGraphicsView.plot(self.V3_buffer, skipFiniteCheck=True)
+        self.plotGraphicsView.setBackground(setting.plot_color)
+        self.line1 = self.plotGraphicsView.plot(self.V1_buffer, skipFiniteCheck=True, pen=settings.line1_color)
+        self.line2 = self.plotGraphicsView.plot(self.V2_buffer, skipFiniteCheck=True, pen=settings.line2_color)
+        self.line3 = self.plotGraphicsView.plot(self.V3_buffer, skipFiniteCheck=True, pen=settings.line3_color)
 
 
         # -------------
@@ -74,7 +75,7 @@ class MainWindow(QMainWindow):
         self.plot_timer.start(100)
 
     def update_plot(self):
-        s = pg.ptime.time()
+        # Process events after every plot operation to keep GUI responsive
         self.line1.setData(self.V1_buffer)
         QApplication.processEvents()
 
@@ -83,9 +84,6 @@ class MainWindow(QMainWindow):
         
         self.line3.setData(self.V3_buffer)
         QApplication.processEvents()
-        
-        e = pg.ptime.time()
-        print("Plot time: %0.2f sec" % (e-s))
 
 
 if __name__ == "__main__":
