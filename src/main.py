@@ -27,13 +27,13 @@ class MainWindow(QMainWindow):
 
         self.plotGraphicsView.setBackground(settings.plot_background)
         self.line1 = self.plotGraphicsView.plot(
-            [], [], skipFiniteCheck=True, pen=settings.line1_color
+            [], [], skipFiniteCheck=True, pen=pg.mkPen(settings.line1_color, width=settings.penWidth)
         )
         self.line2 = self.plotGraphicsView.plot(
-            [], [], skipFiniteCheck=True, pen=settings.line2_color
+            [], [], skipFiniteCheck=True, pen=pg.mkPen(settings.line2_color, width=settings.penWidth)
         )
         self.line3 = self.plotGraphicsView.plot(
-            [], [], skipFiniteCheck=True, pen=settings.line3_color
+            [], [], skipFiniteCheck=True, pen=pg.mkPen(settings.line3_color, width=settings.penWidth)
         )
 
         # -------------
@@ -89,7 +89,7 @@ class MainWindow(QMainWindow):
                     )
                     self.server.mutex.unlock()
                 else:
-                    self.line1.setData([], [])
+                    self.line1.clear()
                 QApplication.processEvents()
 
             if not self.historyButton.isChecked():
@@ -102,7 +102,7 @@ class MainWindow(QMainWindow):
                     )
                     self.server.mutex.unlock()
                 else:
-                    self.line2.setData([], [])
+                    self.line2.clear()
                 QApplication.processEvents()
 
             if not self.historyButton.isChecked():
@@ -115,7 +115,7 @@ class MainWindow(QMainWindow):
                     )
                     self.server.mutex.unlock()
                 else:
-                    self.line3.setData([], [])
+                    self.line3.clear()
                 QApplication.processEvents()
 
         elif combo_box_current_index == settings.I_combo_box_index:
@@ -129,7 +129,7 @@ class MainWindow(QMainWindow):
                     )
                     self.server.mutex.unlock()
                 else:
-                    self.line1.setData([], [])
+                    self.line1.clear()
                 QApplication.processEvents()
 
             if not self.historyButton.isChecked():
@@ -142,7 +142,7 @@ class MainWindow(QMainWindow):
                     )
                     self.server.mutex.unlock()
                 else:
-                    self.line2.setData([], [])
+                    self.line2.clear()
                 QApplication.processEvents()
 
             if not self.historyButton.isChecked():
@@ -155,7 +155,7 @@ class MainWindow(QMainWindow):
                     )
                     self.server.mutex.unlock()
                 else:
-                    self.line3.setData([], [])
+                    self.line3.clear()
                 QApplication.processEvents()
 
     def zoomInX(self):
@@ -186,21 +186,21 @@ class MainWindow(QMainWindow):
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.V1_buffer)
                 else:
-                    self.line1.setData([], [])
+                    self.line1.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line2CheckBox.isChecked():
                     self.line2.setData(self.server.V2_buffer)
                 else:
-                    self.line2.setData([], [])
+                    self.line2.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line3CheckBox.isChecked():
                     self.line3.setData(self.server.V3_buffer)
                 else:
-                    self.line3.setData([], [])
+                    self.line3.clear()
                 QApplication.processEvents()
 
         elif combo_box_current_index == settings.I_combo_box_index:
@@ -208,21 +208,21 @@ class MainWindow(QMainWindow):
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.I1_buffer)
                 else:
-                    self.line1.setData([], [])
+                    self.line1.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line2CheckBox.isChecked():
                     self.line2.setData(self.server.I2_buffer)
                 else:
-                    self.line2.setData([], [])
+                    self.line2.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line3CheckBox.isChecked():
                     self.line3.setData(self.server.I3_buffer)
                 else:
-                    self.line3.setData([], [])
+                    self.line3.clear()
                 QApplication.processEvents()
 
         # Let update_plot handle the else so that there is no race condition
@@ -246,7 +246,7 @@ class MainWindow(QMainWindow):
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.V1_buffer)
                 else:
-                    self.line1.setData([], [])
+                    self.line1.clear()
                 QApplication.processEvents()
 
         elif combo_box_current_index == settings.I_combo_box_index:
@@ -254,7 +254,7 @@ class MainWindow(QMainWindow):
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.I1_buffer)
                 else:
-                    self.line1.setData([], [])
+                    self.line1.clear()
                 QApplication.processEvents()
 
     def onLine2CheckBoxClickedHistoryPlot(self):
@@ -265,7 +265,7 @@ class MainWindow(QMainWindow):
                 if self.line2CheckBox.isChecked():
                     self.line2.setData(self.server.V2_buffer)
                 else:
-                    self.line2.setData([], [])
+                    self.line2.clear()
                 QApplication.processEvents()
 
         elif combo_box_current_index == settings.I_combo_box_index:
@@ -273,7 +273,7 @@ class MainWindow(QMainWindow):
                 if self.line2CheckBox.isChecked():
                     self.line2.setData(self.server.I2_buffer)
                 else:
-                    self.line2.setData([], [])
+                    self.line2.clear()
                 QApplication.processEvents()
 
     def onLine3CheckBoxClickedHistoryPlot(self):
@@ -284,7 +284,7 @@ class MainWindow(QMainWindow):
                 if self.line3CheckBox.isChecked():
                     self.line3.setData(self.server.V3_buffer)
                 else:
-                    self.line3.setData([], [])
+                    self.line3.clear()
                 QApplication.processEvents()
 
         elif combo_box_current_index == settings.I_combo_box_index:
@@ -292,7 +292,7 @@ class MainWindow(QMainWindow):
                 if self.line3CheckBox.isChecked():
                     self.line3.setData(self.server.I3_buffer)
                 else:
-                    self.line3.setData([], [])
+                    self.line3.clear()
                 QApplication.processEvents()
 
 
