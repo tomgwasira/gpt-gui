@@ -192,7 +192,7 @@
       <x>10</x>
       <y>5</y>
       <width>190</width>
-      <height>81</height>
+      <height>131</height>
      </rect>
     </property>
     <property name="title">
@@ -201,22 +201,33 @@
     <property name="alignment">
      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
     </property>
-   </widget>
-   <widget class="QGroupBox" name="inputGroup1GroupBox_2">
-    <property name="geometry">
-     <rect>
-      <x>10</x>
-      <y>90</y>
-      <width>190</width>
-      <height>185</height>
-     </rect>
-    </property>
-    <property name="title">
-     <string>Input Group 2</string>
-    </property>
-    <property name="alignment">
-     <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
-    </property>
+    <widget class="QWidget" name="">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>191</width>
+       <height>92</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_3">
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+      </item>
+     </layout>
+    </widget>
    </widget>
    <widget class="QSplitter" name="splitter">
     <property name="geometry">
@@ -242,6 +253,49 @@
      <property name="text">
       <string>Stop</string>
      </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="inputGroup1GroupBox_2">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>150</y>
+      <width>190</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Input Group 1</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
+    </property>
+    <widget class="QWidget" name="layoutWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>30</y>
+       <width>191</width>
+       <height>92</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_4">
+      <property name="leftMargin">
+       <number>1</number>
+      </property>
+      <property name="rightMargin">
+       <number>1</number>
+      </property>
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+      </item>
+      <item>
+       <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+      </item>
+     </layout>
     </widget>
    </widget>
   </widget>

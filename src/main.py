@@ -25,7 +25,7 @@ class MainWindow(QMainWindow):
         # TODO: Set icon
         # self.setWindowIcon(QtGui.QIcon('im.png'))
 
-        self.plotGraphicsView.setBackground(settings.plot_background)
+        self.plotGraphicsView.setBackground(settings.plotBackground)
         self.plotGraphicsView.showGrid(x=True, y=True)
         self.line1 = self.plotGraphicsView.plot(
             [],
@@ -73,13 +73,13 @@ class MainWindow(QMainWindow):
         # QTimer setup
         # ------------
         # Create timers
-        self.plot_timer = QTimer()
+        self.plotTimer = QTimer()
 
         # Connect timer signals
-        self.plot_timer.timeout.connect(self.update_plot)
+        self.plotTimer.timeout.connect(self.update_plot)
 
         # Start timers
-        # self.plot_timer.start(100)
+        # self.plotTimer.start(100)
 
         # --------------------
         # Emit initial signals
@@ -91,9 +91,9 @@ class MainWindow(QMainWindow):
 
         # Check which plot type is selected in combo box then display the lines
         # corresponding to selected check boxes.
-        combo_box_current_index = self.plotTypeComboBox.currentIndex()
+        comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
 
-        if combo_box_current_index == settings.V_combo_box_index:
+        if comboBoxCurrentIndex == settings.V_combo_box_index:
             if not self.historyButton.isChecked():
                 if self.line1CheckBox.isChecked():
                     self.server.mutex.lock()
@@ -133,7 +133,7 @@ class MainWindow(QMainWindow):
                     self.line3.clear()
                 QApplication.processEvents()
 
-        elif combo_box_current_index == settings.I_combo_box_index:
+        elif comboBoxCurrentIndex == settings.I_combo_box_index:
             if not self.historyButton.isChecked():
                 if self.line1CheckBox.isChecked():
                     self.server.mutex.lock()
@@ -194,9 +194,9 @@ class MainWindow(QMainWindow):
         self.plotGraphicsView.getViewBox().scaleBy(zoom)
 
     def onHistoryButtonClicked(self, isChecked):
-        combo_box_current_index = self.plotTypeComboBox.currentIndex()
+        comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
 
-        if combo_box_current_index == settings.V_combo_box_index:
+        if comboBoxCurrentIndex == settings.V_combo_box_index:
             if isChecked == True:
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.V1_buffer)
@@ -218,7 +218,7 @@ class MainWindow(QMainWindow):
                     self.line3.clear()
                 QApplication.processEvents()
 
-        elif combo_box_current_index == settings.I_combo_box_index:
+        elif comboBoxCurrentIndex == settings.I_combo_box_index:
             if isChecked == True:
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.I1_buffer)
@@ -242,21 +242,21 @@ class MainWindow(QMainWindow):
 
         # Let update_plot handle the else so that there is no race condition
 
-    def onPlotTypeComboBoxSelect(self, combo_box_current_index):
-        if combo_box_current_index == settings.V_combo_box_index:
+    def onPlotTypeComboBoxSelect(self, comboBoxCurrentIndex):
+        if comboBoxCurrentIndex == settings.V_combo_box_index:
             self.line1CheckBox.setText("V1")
             self.line2CheckBox.setText("V2")
             self.line3CheckBox.setText("V3")
 
-        elif combo_box_current_index == settings.I_combo_box_index:
+        elif comboBoxCurrentIndex == settings.I_combo_box_index:
             self.line1CheckBox.setText("I1")
             self.line2CheckBox.setText("I2")
             self.line3CheckBox.setText("I3")
 
     def onLine1CheckBoxClickedHistoryPlot(self):
-        combo_box_current_index = self.plotTypeComboBox.currentIndex()
+        comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
 
-        if combo_box_current_index == settings.V_combo_box_index:
+        if comboBoxCurrentIndex == settings.V_combo_box_index:
             if self.historyButton.isChecked():
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.V1_buffer)
@@ -264,7 +264,7 @@ class MainWindow(QMainWindow):
                     self.line1.clear()
                 QApplication.processEvents()
 
-        elif combo_box_current_index == settings.I_combo_box_index:
+        elif comboBoxCurrentIndex == settings.I_combo_box_index:
             if self.historyButton.isChecked():
                 if self.line1CheckBox.isChecked():
                     self.line1.setData(self.server.I1_buffer)
@@ -273,9 +273,9 @@ class MainWindow(QMainWindow):
                 QApplication.processEvents()
 
     def onLine2CheckBoxClickedHistoryPlot(self):
-        combo_box_current_index = self.plotTypeComboBox.currentIndex()
+        comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
 
-        if combo_box_current_index == settings.V_combo_box_index:
+        if comboBoxCurrentIndex == settings.V_combo_box_index:
             if self.historyButton.isChecked():
                 if self.line2CheckBox.isChecked():
                     self.line2.setData(self.server.V2_buffer)
@@ -283,7 +283,7 @@ class MainWindow(QMainWindow):
                     self.line2.clear()
                 QApplication.processEvents()
 
-        elif combo_box_current_index == settings.I_combo_box_index:
+        elif comboBoxCurrentIndex == settings.I_combo_box_index:
             if self.historyButton.isChecked():
                 if self.line2CheckBox.isChecked():
                     self.line2.setData(self.server.I2_buffer)
@@ -292,9 +292,9 @@ class MainWindow(QMainWindow):
                 QApplication.processEvents()
 
     def onLine3CheckBoxClickedHistoryPlot(self):
-        combo_box_current_index = self.plotTypeComboBox.currentIndex()
+        comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
 
-        if combo_box_current_index == settings.V_combo_box_index:
+        if comboBoxCurrentIndex == settings.V_combo_box_index:
             if self.historyButton.isChecked():
                 if self.line3CheckBox.isChecked():
                     self.line3.setData(self.server.V3_buffer)
@@ -302,7 +302,7 @@ class MainWindow(QMainWindow):
                     self.line3.clear()
                 QApplication.processEvents()
 
-        elif combo_box_current_index == settings.I_combo_box_index:
+        elif comboBoxCurrentIndex == settings.I_combo_box_index:
             if self.historyButton.isChecked():
                 if self.line3CheckBox.isChecked():
                     self.line3.setData(self.server.I3_buffer)
