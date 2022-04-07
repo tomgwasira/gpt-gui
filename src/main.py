@@ -25,37 +25,22 @@ class MainWindow(QMainWindow):
         # TODO: Set icon
         # self.setWindowIcon(QtGui.QIcon('im.png'))
 
-        # Initialise data buffers
-        self.V1_buffer = []
-        self.V2_buffer = []
-        self.V3_buffer = []
-        self.I1_buffer = []
-        self.I2_buffer = []
-        self.I3_buffer = []
-
         self.plotGraphicsView.setBackground(settings.plot_background)
         self.line1 = self.plotGraphicsView.plot(
-            self.V1_buffer, skipFiniteCheck=True, pen=settings.line1_color
+            [], skipFiniteCheck=True, pen=settings.line1_color
         )
         self.line2 = self.plotGraphicsView.plot(
-            self.V2_buffer, skipFiniteCheck=True, pen=settings.line2_color
+            [], skipFiniteCheck=True, pen=settings.line2_color
         )
         self.line3 = self.plotGraphicsView.plot(
-            self.V3_buffer, skipFiniteCheck=True, pen=settings.line3_color
+            [], skipFiniteCheck=True, pen=settings.line3_color
         )
 
         # -------------
         # QThread setup
         # -------------
         # Create worker objects
-        self.server = TcpServer(
-            V1_buffer=self.V1_buffer,
-            V2_buffer=self.V2_buffer,
-            V3_buffer=self.V3_buffer,
-            I1_buffer=self.I1_buffer,
-            I2_buffer=self.I2_buffer,
-            I3_buffer=self.I3_buffer,
-        )
+        self.server = TcpServer()
 
         # Create QThread objects
         self.receiveThread = QThread()
@@ -82,15 +67,49 @@ class MainWindow(QMainWindow):
         self.plot_timer.start(100)
 
     def update_plot(self):
-        # Process events after every plot operation to keep GUI responsive
-        self.line1.setData(self.V1_buffer)
-        QApplication.processEvents()
+        # Process events after every plotting event to keep GUI responsive
 
-        self.line2.setData(self.V2_buffer)
-        QApplication.processEvents()
+        # Check which plot type is selected in combo box then display the lines
+        # corresponding to selected check boxes.
+        combo_box_current_index = self.plotTypeComboBox.currentIndex()
 
-        self.line3.setData(self.V3_buffer)
-        QApplication.processEvents()
+        if combo_box_current_index == settings.V_combo_box_index:
+            if self.line1CheckBox.isChecked():
+                self.line1.set_data(self.server.V1_buffer)
+            else:
+                self.line1.setData([])
+            QApplication.processEvents()
+
+            if self.line2CheckBox.isChecked():
+                self.line2.set_data(self.server.V2_buffer)
+            else:
+                self.line2.setData([])
+            QApplication.processEvents()
+
+            if self.line3CheckBox.isChecked():
+                self.line3.set_data(self.server.V3_buffer)
+            else:
+                self.line3.setData([])
+            QApplication.processEvents()
+
+        elif combo_box_current_index == settings.I_combo_box_index:
+            if self.line1CheckBox.isChecked():
+                self.line1.set_data(self.server.I1_buffer)
+            else:
+                self.line1.setData([])
+            QApplication.processEvents()
+
+            if self.line2CheckBox.isChecked():
+                self.line2.set_data(self.server.I2_buffer)
+            else:
+                self.line2.setData([])
+            QApplication.processEvents()
+
+            if self.line3CheckBox.isChecked():
+                self.line3.set_data(self.server.I3_buffer)
+            else:
+                self.line3.setData([])
+            QApplication.processEvents()
 
 
 if __name__ == "__main__":

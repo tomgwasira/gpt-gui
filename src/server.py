@@ -12,16 +12,9 @@ import settings
 #         print("Receiving")
 #         self.dataReadyToPlot.emit()
 
+
 class TcpServer(QObject):
-    def __init__(
-                    self,
-                    V1_buffer,
-                    V2_buffer,
-                    V3_buffer,
-                    I1_buffer,
-                    I2_buffer,
-                    I3_buffer,
-                ) -> None:
+    def __init__(self) -> None:
         super(QObject, self).__init__()
         self.buffer_len = 13  # number of elements in received TCP buffer
         self.buffer_size = (
@@ -29,12 +22,12 @@ class TcpServer(QObject):
         )  # number of bytes in received TCP buffer. 8 because storing doubles.
 
         # Initialise shared memory for buffer
-        self.V1_buffer=V1_buffer
-        self.V2_buffer=V2_buffer
-        self.V3_buffer=V3_buffer
-        self.I1_buffer=I1_buffer
-        self.I2_buffer=I2_buffer
-        self.I3_buffer=I3_buffer
+        self.V1_buffer = []
+        self.V2_buffer = []
+        self.V3_buffer = []
+        self.I1_buffer = []
+        self.I2_buffer = []
+        self.I3_buffer = []
 
     def run_server(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:

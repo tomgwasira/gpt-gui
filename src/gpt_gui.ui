@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>405</height>
+    <height>410</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,10 +17,10 @@
    <widget class="QGroupBox" name="plotGroupBox">
     <property name="geometry">
      <rect>
-      <x>209</x>
-      <y>5</y>
+      <x>220</x>
+      <y>0</y>
       <width>581</width>
-      <height>431</height>
+      <height>361</height>
      </rect>
     </property>
     <property name="title">
@@ -38,14 +38,14 @@
     <widget class="PlotWidget" name="plotGraphicsView">
      <property name="geometry">
       <rect>
-       <x>15</x>
-       <y>31</y>
-       <width>551</width>
-       <height>361</height>
+       <x>10</x>
+       <y>30</y>
+       <width>561</width>
+       <height>301</height>
       </rect>
      </property>
     </widget>
-    <widget class="QComboBox" name="comboBox">
+    <widget class="QComboBox" name="plotTypeComboBox">
      <property name="geometry">
       <rect>
        <x>425</x>
@@ -65,7 +65,7 @@
       </property>
      </item>
     </widget>
-    <widget class="QCheckBox" name="checkBox">
+    <widget class="QCheckBox" name="line1CheckBox">
      <property name="geometry">
       <rect>
        <x>430</x>
@@ -75,10 +75,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>CheckBox</string>
+      <string>Line 1</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_2">
+    <widget class="QCheckBox" name="line2CheckBox">
      <property name="geometry">
       <rect>
        <x>430</x>
@@ -88,10 +88,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>CheckBox</string>
+      <string>Line 2</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="checkBox_3">
+    <widget class="QCheckBox" name="line3CheckBox">
      <property name="geometry">
       <rect>
        <x>430</x>
@@ -101,7 +101,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>CheckBox</string>
+      <string>Line 3</string>
      </property>
     </widget>
    </widget>
@@ -111,7 +111,7 @@
       <x>10</x>
       <y>5</y>
       <width>190</width>
-      <height>185</height>
+      <height>81</height>
      </rect>
     </property>
     <property name="title">
@@ -125,7 +125,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>200</y>
+      <y>90</y>
       <width>190</width>
       <height>185</height>
      </rect>
@@ -141,7 +141,7 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>400</y>
+      <y>330</y>
       <width>191</width>
       <height>31</height>
      </rect>
