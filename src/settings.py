@@ -8,6 +8,7 @@ plot_background = "w"
 line1_color = "b"
 line2_color = "#ff8c00"
 line3_color = "g"
+axisScalingFactor = 10  # value of axis scale. Depends on sample rate i.e. 1 sample = axisScalingFactor seconds.
 
 # Viewbox preferences
 zoom_amount = 0.75

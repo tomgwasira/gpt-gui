@@ -26,14 +26,29 @@ class MainWindow(QMainWindow):
         # self.setWindowIcon(QtGui.QIcon('im.png'))
 
         self.plotGraphicsView.setBackground(settings.plot_background)
+        self.plotGraphicsView.showGrid(x=True, y=True)
         self.line1 = self.plotGraphicsView.plot(
-            [], [], skipFiniteCheck=True, pen=pg.mkPen(settings.line1_color, width=settings.penWidth)
+            [],
+            [],
+            skipFiniteCheck=True,
+            pen=pg.mkPen(settings.line1_color, width=settings.penWidth),
         )
         self.line2 = self.plotGraphicsView.plot(
-            [], [], skipFiniteCheck=True, pen=pg.mkPen(settings.line2_color, width=settings.penWidth)
+            [],
+            [],
+            skipFiniteCheck=True,
+            pen=pg.mkPen(settings.line2_color, width=settings.penWidth),
         )
         self.line3 = self.plotGraphicsView.plot(
-            [], [], skipFiniteCheck=True, pen=pg.mkPen(settings.line3_color, width=settings.penWidth)
+            [],
+            [],
+            skipFiniteCheck=True,
+            pen=pg.mkPen(settings.line3_color, width=settings.penWidth),
+        )
+
+        # Scale axis to display correct values for each tick
+        self.plotGraphicsView.getAxis("bottom").setScale(
+            settings.axisScalingFactor
         )
 
         # -------------
@@ -64,7 +79,7 @@ class MainWindow(QMainWindow):
         self.plot_timer.timeout.connect(self.update_plot)
 
         # Start timers
-        self.plot_timer.start(100)
+        # self.plot_timer.start(100)
 
         # --------------------
         # Emit initial signals
