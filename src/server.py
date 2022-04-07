@@ -127,47 +127,81 @@ class TcpServer(QObject):
                     self.f0_I2 = data[11]
                     self.f0_I3 = data[12]
 
+                    self.trigger(V1_value, V2_value, V3_value, I1_value, I2_value, I3_value)
 
-                    # Lock to avoid plotting while indexes are being modified
-                    self.mutex.lock()
-                    # Check trigger value
-                    if V1_value > self.V1_trigger_value:
-                        self.V1_upper_limit = len(self.V1_buffer)
-                        self.V1_lower_limit = self.V1_upper_limit - self.n_samples_in_view
-                        if self.V1_lower_limit < 0:
-                            self.V1_lower_limit = 0
+                    if len(self.V1_buffer) > settings.maxBufferLength:
+                        self.clearBuffers()
 
-                    if V2_value > self.V2_trigger_value:
-                        self.V2_upper_limit = len(self.V2_buffer)
-                        self.V2_lower_limit = self.V2_upper_limit - self.n_samples_in_view
-                        if self.V2_lower_limit < 0:
-                            self.V2_lower_limit = 0
+    def trigger(self, V1_value, V2_value, V3_value, I1_value, I2_value, I3_value):
+        # Lock to avoid plotting while indexes are being modified
+        self.mutex.lock()
+        # Check trigger value
+        if V1_value > self.V1_trigger_value:
+            self.V1_upper_limit = len(self.V1_buffer)
+            self.V1_lower_limit = self.V1_upper_limit - self.n_samples_in_view
+            if self.V1_lower_limit < 0:
+                self.V1_lower_limit = 0
 
-                    if V3_value > self.V3_trigger_value:
-                        self.V3_upper_limit = len(self.V3_buffer)
-                        self.V3_lower_limit = self.V3_upper_limit - self.n_samples_in_view
-                        if self.V3_lower_limit < 0:
-                            self.V3_lower_limit = 0
+        if V2_value > self.V2_trigger_value:
+            self.V2_upper_limit = len(self.V2_buffer)
+            self.V2_lower_limit = self.V2_upper_limit - self.n_samples_in_view
+            if self.V2_lower_limit < 0:
+                self.V2_lower_limit = 0
 
-                    if I1_value > self.I1_trigger_value:
-                        self.I1_upper_limit = len(self.I1_buffer)
-                        self.I1_lower_limit = self.I1_upper_limit - self.n_samples_in_view
-                        if self.I1_lower_limit < 0:
-                            self.I1_lower_limit = 0
+        if V3_value > self.V3_trigger_value:
+            self.V3_upper_limit = len(self.V3_buffer)
+            self.V3_lower_limit = self.V3_upper_limit - self.n_samples_in_view
+            if self.V3_lower_limit < 0:
+                self.V3_lower_limit = 0
 
-                    if I2_value > self.I2_trigger_value:
-                        self.I2_upper_limit = len(self.I2_buffer)
-                        self.I2_lower_limit = self.I2_upper_limit - self.n_samples_in_view
-                        if self.I2_lower_limit < 0:
-                            self.I2_lower_limit = 0
+        if I1_value > self.I1_trigger_value:
+            self.I1_upper_limit = len(self.I1_buffer)
+            self.I1_lower_limit = self.I1_upper_limit - self.n_samples_in_view
+            if self.I1_lower_limit < 0:
+                self.I1_lower_limit = 0
 
-                    if I3_value > self.I3_trigger_value:
-                        self.I3_upper_limit = len(self.I3_buffer)
-                        self.I3_lower_limit = self.I3_upper_limit - self.n_samples_in_view
-                        if self.I3_lower_limit < 0:
-                            self.I3_lower_limit = 0        
+        if I2_value > self.I2_trigger_value:
+            self.I2_upper_limit = len(self.I2_buffer)
+            self.I2_lower_limit = self.I2_upper_limit - self.n_samples_in_view
+            if self.I2_lower_limit < 0:
+                self.I2_lower_limit = 0
 
-                    self.mutex.unlock()
+        if I3_value > self.I3_trigger_value:
+            self.I3_upper_limit = len(self.I3_buffer)
+            self.I3_lower_limit = self.I3_upper_limit - self.n_samples_in_view
+            if self.I3_lower_limit < 0:
+                self.I3_lower_limit = 0        
+
+        self.mutex.unlock()
+    
+    def clearBuffers(self):
+        self.mutex.lock()
+
+        del self.V1_buffer[:self.V1_lower_limit]
+        self.V1_lower_limit = 0
+        self.V1_upper_limit = len(self.V1_buffer)
+
+        del self.V2_buffer[:self.V2_lower_limit]
+        self.V2_lower_limit = 0
+        self.V2_upper_limit = len(self.V2_buffer)
+
+        del self.V3_buffer[:self.V3_lower_limit]
+        self.V3_lower_limit = 0
+        self.V3_upper_limit = len(self.V3_buffer)
+
+        del self.I1_buffer[:self.I1_lower_limit]
+        self.I1_lower_limit = 0
+        self.I1_upper_limit = len(self.I1_buffer)
+
+        del self.I2_buffer[:self.I2_lower_limit]
+        self.I2_lower_limit = 0
+        self.I2_upper_limit = len(self.I2_buffer)
+
+        del self.I3_buffer[:self.I3_lower_limit]
+        self.I3_lower_limit = 0
+        self.I3_upper_limit = len(self.I3_buffer)
+
+        self.mutex.unlock()
 
 
 

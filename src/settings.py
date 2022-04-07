@@ -16,3 +16,6 @@ zoom_amount = 0.75
 # Combo box indexes
 V_combo_box_index = 0
 I_combo_box_index = 1
+
+# Memory
+maxBufferLength = 10000

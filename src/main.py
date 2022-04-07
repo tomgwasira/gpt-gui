@@ -19,8 +19,8 @@ class MainWindow(QMainWindow):
         # Load QtDesigner file
         uic.loadUi("gpt_gui.ui", self)
 
-        x = np.linspace(0, 100, 101)
-        y = np.ones(101)
+        # x = np.linspace(0, 100, 101)
+        # y = np.ones(101)
 
         # TODO: Set icon
         # self.setWindowIcon(QtGui.QIcon('im.png'))
@@ -79,7 +79,7 @@ class MainWindow(QMainWindow):
         self.plotTimer.timeout.connect(self.update_plot)
 
         # Start timers
-        # self.plotTimer.start(100)
+        self.plotTimer.start(100)
 
         # --------------------
         # Emit initial signals

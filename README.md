@@ -1,5 +1,24 @@
 # Graphical User Interface Implementation for General Power Theory
 
+## Development
+### Install PyQt5
+```
+sudo apt-get install python3-pyqt5
+```
+
+Warning: PyQt does not play well with virtual environments especially on the Raspberry Pi.
+
+### Install Qt Designer
+```
+sudo apt-get install qttools5-dev-tools
+sudo apt-get install qttools5-dev
+```
+
+### Install PyQtGraph
+```
+pip3 install pyqtgraph
+```
+
 ## Packaging with PyInstaller
 
 ### Install PyInstaller
