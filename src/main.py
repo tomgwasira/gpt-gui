@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtWidgets, QtGui
 from PyQt5.QtCore import QThread, QTimer
 from PyQt5.QtWidgets import QApplication, QMainWindow
 from PyQt5 import uic
+import pyqtgraph as pg
 from pyqtgraph import PlotWidget
 import numpy as np
 
@@ -30,9 +31,9 @@ class MainWindow(QMainWindow):
         self.I2_buffer = []
         self.I3_buffer = []
 
-        self.plotGraphicsView.plot(self.V1_buffer)
-        self.plotGraphicsView.plot(self.V2_buffer)
-        self.plotGraphicsView.plot(self.V3_buffer)
+        self.line1 = self.plotGraphicsView.plot(self.V1_buffer, skipFiniteCheck=True)
+        self.line2 = self.plotGraphicsView.plot(self.V2_buffer, skipFiniteCheck=True)
+        self.line3 = self.plotGraphicsView.plot(self.V3_buffer, skipFiniteCheck=True)
 
 
         # -------------
@@ -73,9 +74,12 @@ class MainWindow(QMainWindow):
         self.plot_timer.start(100)
 
     def update_plot(self):
-        self.plotGraphicsView.plot(self.V1_buffer)
-        self.plotGraphicsView.plot(self.V2_buffer)
-        self.plotGraphicsView.plot(self.V3_buffer)
+        s = pg.ptime.time()
+        self.line1.setData(self.V1_buffer)
+        self.line2.setData(self.V2_buffer)
+        self.line3.setData(self.V3_buffer)
+        e = pg.ptime.time()
+        print("Plot time: %0.2f sec" % (e-s))
 
 
 if __name__ == "__main__":

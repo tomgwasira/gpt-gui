@@ -64,7 +64,14 @@ class TcpServer(QObject):
                     # ------------
                     # Data receive
                     # ------------
-                    data = conn.recv(self.buffer_size)
+                    size_to_read = self.buffer_size
+                    data = b""
+
+                    # Keep receiving until the expected buffer size has been read
+                    while size_to_read > 0:
+                        data = data + conn.recv(size_to_read)
+                        size_to_read -= len(data)
+
                     data = struct.unpack((str(self.buffer_len) + "d"), data)
 
                     # Add received data to appropriate buffers
