@@ -27,13 +27,13 @@ class MainWindow(QMainWindow):
 
         self.plotGraphicsView.setBackground(settings.plot_background)
         self.line1 = self.plotGraphicsView.plot(
-            [], skipFiniteCheck=True, pen=settings.line1_color
+            [], [], skipFiniteCheck=True, pen=settings.line1_color
         )
         self.line2 = self.plotGraphicsView.plot(
-            [], skipFiniteCheck=True, pen=settings.line2_color
+            [], [], skipFiniteCheck=True, pen=settings.line2_color
         )
         self.line3 = self.plotGraphicsView.plot(
-            [], skipFiniteCheck=True, pen=settings.line3_color
+            [], [], skipFiniteCheck=True, pen=settings.line3_color
         )
 
         # -------------
@@ -53,6 +53,8 @@ class MainWindow(QMainWindow):
 
         # Start threads
         self.receiveThread.start()
+
+
 
         # ------------
         # QTimer setup
@@ -75,40 +77,52 @@ class MainWindow(QMainWindow):
 
         if combo_box_current_index == settings.V_combo_box_index:
             if self.line1CheckBox.isChecked():
-                self.line1.set_data(self.server.V1_buffer)
+                self.server.mutex.lock()
+                self.line1.setData(self.server.V1_buffer[self.server.V1_lower_limit:self.server.V1_upper_limit])
+                self.server.mutex.unlock()
             else:
-                self.line1.setData([])
+                self.line1.setData([], [])
             QApplication.processEvents()
 
             if self.line2CheckBox.isChecked():
-                self.line2.set_data(self.server.V2_buffer)
+                self.server.mutex.lock()
+                self.line2.setData(self.server.V2_buffer[self.server.V2_lower_limit:self.server.V2_upper_limit])
+                self.server.mutex.unlock()
             else:
-                self.line2.setData([])
+                self.line2.setData([], [])
             QApplication.processEvents()
 
             if self.line3CheckBox.isChecked():
-                self.line3.set_data(self.server.V3_buffer)
+                self.server.mutex.lock()
+                self.line3.setData(self.server.V3_buffer[self.server.V3_lower_limit:self.server.V3_upper_limit])
+                self.server.mutex.unlock()
             else:
-                self.line3.setData([])
+                self.line3.setData([], [])
             QApplication.processEvents()
 
         elif combo_box_current_index == settings.I_combo_box_index:
             if self.line1CheckBox.isChecked():
-                self.line1.set_data(self.server.I1_buffer)
+                self.server.mutex.lock()
+                self.line1.setData(self.server.I1_buffer[self.server.I1_lower_limit:self.server.I1_upper_limit])
+                self.server.mutex.unlock()
             else:
-                self.line1.setData([])
+                self.line1.setData([], [])
             QApplication.processEvents()
 
             if self.line2CheckBox.isChecked():
-                self.line2.set_data(self.server.I2_buffer)
+                self.server.mutex.lock()
+                self.line2.setData(self.server.I2_buffer[self.server.I2_lower_limit:self.server.I2_upper_limit])
+                self.server.mutex.unlock()
             else:
-                self.line2.setData([])
+                self.line2.setData([], [])
             QApplication.processEvents()
 
             if self.line3CheckBox.isChecked():
-                self.line3.set_data(self.server.I3_buffer)
+                self.server.mutex.lock()
+                self.line3.setData(self.server.I3_buffer[self.server.I3_lower_limit:self.server.I3_upper_limit])
+                self.server.mutex.unlock()
             else:
-                self.line3.setData([])
+                self.line3.setData([], [])
             QApplication.processEvents()
 
 

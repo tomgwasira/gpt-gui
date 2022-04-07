@@ -1,7 +1,17 @@
+"""
+To-do:
+    * Check how quickly the client sends data and then profile how quickly the
+        current server can run the whole while loop and then reconcile those times.
+        However, it's nothing to be too worried about because the server actually
+        sends data first so if the client is using a block recv, the times will
+        synchronise automatically (unless if using threads in the client).
+"""
+
 import socket
 import struct
+import pyqtgraph as pg
 
-from PyQt5.QtCore import QObject
+from PyQt5.QtCore import QMutex, QObject
 
 import settings
 
@@ -21,6 +31,11 @@ class TcpServer(QObject):
             self.buffer_len * 8
         )  # number of bytes in received TCP buffer. 8 because storing doubles.
 
+        # ------------
+        # QMutex setup
+        # ------------
+        self.mutex = QMutex()
+
         # Initialise shared memory for buffer
         self.V1_buffer = []
         self.V2_buffer = []
@@ -28,6 +43,28 @@ class TcpServer(QObject):
         self.I1_buffer = []
         self.I2_buffer = []
         self.I3_buffer = []
+
+        self.n_samples_in_view = 100
+
+        self.V1_trigger_value = 0
+        self.V2_trigger_value = 0
+        self.V3_trigger_value = 0
+        self.I1_trigger_value = 0
+        self.I2_trigger_value = 0
+        self.I3_trigger_value = 0
+
+        self.V1_upper_limit = 0
+        self.V1_lower_limit = 0
+        self.V2_upper_limit = 0
+        self.V2_lower_limit = 0
+        self.V3_upper_limit = 0
+        self.V3_lower_limit = 0
+        self.I1_upper_limit = 0
+        self.I1_lower_limit = 0
+        self.I2_upper_limit = 0
+        self.I2_lower_limit = 0
+        self.I3_upper_limit = 0
+        self.I3_lower_limit = 0
 
     def run_server(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -67,9 +104,16 @@ class TcpServer(QObject):
 
                     data = struct.unpack((str(self.buffer_len) + "d"), data)
 
+                    V1_value = data[1]
+                    V2_value = data[2]
+                    V3_value = data[3]
+                    I1_value = data[4]
+                    I2_value = data[5]
+                    I3_value = data[6]
+        
                     # Add received data to appropriate buffers
-                    # t_buffer.append(data[0])
-                    self.V1_buffer.append(data[1])
+                    # TODO: Deal with t_buffer inputs
+                    self.V1_buffer.append(V1_value)
                     self.V2_buffer.append(data[2])
                     self.V3_buffer.append(data[3])
                     self.I1_buffer.append(data[4])
@@ -82,3 +126,53 @@ class TcpServer(QObject):
                     self.f0_I1 = data[10]
                     self.f0_I2 = data[11]
                     self.f0_I3 = data[12]
+
+
+                    # Lock to avoid plotting while indexes are being modified
+                    self.mutex.lock()
+                    s = pg.ptime.time()
+                    # Check trigger value
+                    if V1_value > self.V1_trigger_value:
+                        self.V1_upper_limit = len(self.V1_buffer)
+                        self.V1_lower_limit = self.V1_upper_limit - self.n_samples_in_view
+                        if self.V1_lower_limit < 0:
+                            self.V1_lower_limit = 0
+
+                    if V2_value > self.V2_trigger_value:
+                        self.V2_upper_limit = len(self.V2_buffer)
+                        self.V2_lower_limit = self.V2_upper_limit - self.n_samples_in_view
+                        if self.V2_lower_limit < 0:
+                            self.V2_lower_limit = 0
+
+                    if V3_value > self.V3_trigger_value:
+                        self.V3_upper_limit = len(self.V3_buffer)
+                        self.V3_lower_limit = self.V3_upper_limit - self.n_samples_in_view
+                        if self.V3_lower_limit < 0:
+                            self.V3_lower_limit = 0
+
+                    if I1_value > self.I1_trigger_value:
+                        self.I1_upper_limit = len(self.I1_buffer)
+                        self.I1_lower_limit = self.I1_upper_limit - self.n_samples_in_view
+                        if self.I1_lower_limit < 0:
+                            self.I1_lower_limit = 0
+
+                    if I2_value > self.I2_trigger_value:
+                        self.I2_upper_limit = len(self.I2_buffer)
+                        self.I2_lower_limit = self.I2_upper_limit - self.n_samples_in_view
+                        if self.I2_lower_limit < 0:
+                            self.I2_lower_limit = 0
+
+                    if I3_value > self.I3_trigger_value:
+                        self.I3_upper_limit = len(self.I3_buffer)
+                        self.I3_lower_limit = self.I3_upper_limit - self.n_samples_in_view
+                        if self.I3_lower_limit < 0:
+                            self.I3_lower_limit = 0        
+
+                    e = pg.ptime.time()
+                    print(e-s)
+                    self.mutex.unlock()
+
+
+
+
+
