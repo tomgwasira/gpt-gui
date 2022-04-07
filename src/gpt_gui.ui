@@ -45,7 +45,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>450</x>
@@ -120,69 +120,142 @@
     <widget class="QPushButton" name="zoomInXButton">
      <property name="geometry">
       <rect>
-       <x>100</x>
-       <y>330</y>
-       <width>89</width>
-       <height>25</height>
+       <x>50</x>
+       <y>325</y>
+       <width>35</width>
+       <height>35</height>
       </rect>
      </property>
      <property name="text">
-      <string>Zoom In x</string>
+      <string>x</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../img/zoom-in.png</normaloff>../img/zoom-in.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="zoomOutXButton">
      <property name="geometry">
       <rect>
-       <x>190</x>
-       <y>330</y>
-       <width>89</width>
-       <height>25</height>
+       <x>90</x>
+       <y>325</y>
+       <width>35</width>
+       <height>35</height>
       </rect>
      </property>
      <property name="text">
-      <string>Zoom Out x</string>
+      <string>x</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../img/zoom-out.png</normaloff>../img/zoom-out.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="historyButton">
      <property name="geometry">
       <rect>
        <x>10</x>
-       <y>330</y>
-       <width>89</width>
-       <height>25</height>
+       <y>325</y>
+       <width>35</width>
+       <height>35</height>
       </rect>
      </property>
      <property name="text">
-      <string>History</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../img/history.png</normaloff>../img/history.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
      <property name="checkable">
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="zoomInYButton">
+    <widget class="QPushButton" name="pushButton_3">
      <property name="geometry">
       <rect>
-       <x>280</x>
-       <y>330</y>
-       <width>89</width>
-       <height>25</height>
+       <x>210</x>
+       <y>325</y>
+       <width>35</width>
+       <height>35</height>
       </rect>
      </property>
      <property name="text">
-      <string>Zoom In y</string>
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../img/plot-info.png</normaloff>../img/plot-info.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="zoomInYButton">
+     <property name="geometry">
+      <rect>
+       <x>130</x>
+       <y>325</y>
+       <width>35</width>
+       <height>35</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>y</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../img/zoom-in.png</normaloff>../img/zoom-in.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
     </widget>
     <widget class="QPushButton" name="zoomOutYButton">
      <property name="geometry">
       <rect>
-       <x>370</x>
-       <y>330</y>
-       <width>89</width>
-       <height>25</height>
+       <x>170</x>
+       <y>325</y>
+       <width>35</width>
+       <height>35</height>
       </rect>
      </property>
      <property name="text">
-      <string>Zoom Out y</string>
+      <string>y</string>
+     </property>
+     <property name="icon">
+      <iconset>
+       <normaloff>../img/zoom-out.png</normaloff>../img/zoom-out.png</iconset>
+     </property>
+     <property name="iconSize">
+      <size>
+       <width>20</width>
+       <height>20</height>
+      </size>
      </property>
     </widget>
    </widget>
@@ -201,7 +274,7 @@
     <property name="alignment">
      <set>Qt::AlignBottom|Qt::AlignLeading|Qt::AlignLeft</set>
     </property>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>0</x>
@@ -218,13 +291,13 @@
        <number>1</number>
       </property>
       <item>
-       <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+       <widget class="QDoubleSpinBox" name="inputGroup1DoubleSpinBox_1"/>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_2"/>
+       <widget class="QDoubleSpinBox" name="inputGroup1DoubleSpinBox_2"/>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_3"/>
+       <widget class="QDoubleSpinBox" name="inputGroup1DoubleSpinBox_3"/>
       </item>
      </layout>
     </widget>
@@ -255,7 +328,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QGroupBox" name="inputGroup1GroupBox_2">
+   <widget class="QGroupBox" name="inputGroup2GroupBox">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -287,13 +360,13 @@
        <number>1</number>
       </property>
       <item>
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_4"/>
+       <widget class="QDoubleSpinBox" name="inputGroup2DoubleSpinBox_1"/>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_5"/>
+       <widget class="QDoubleSpinBox" name="inputGroup2DoubleSpinBox_2"/>
       </item>
       <item>
-       <widget class="QDoubleSpinBox" name="doubleSpinBox_6"/>
+       <widget class="QDoubleSpinBox" name="inputGroup2DoubleSpinBox_3"/>
       </item>
      </layout>
     </widget>
@@ -433,13 +506,13 @@
    </hints>
   </connection>
   <connection>
-   <sender>zoomOutYButton</sender>
+   <sender>zoomInYButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>zoomOutY()</slot>
+   <slot>zoomInY()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>624</x>
+     <x>357</x>
      <y>364</y>
     </hint>
     <hint type="destinationlabel">
@@ -449,13 +522,13 @@
    </hints>
   </connection>
   <connection>
-   <sender>zoomInYButton</sender>
+   <sender>zoomOutYButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>zoomInY()</slot>
+   <slot>zoomOutY()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>534</x>
+     <x>397</x>
      <y>364</y>
     </hint>
     <hint type="destinationlabel">
