@@ -31,24 +31,29 @@ class MainWindow(QMainWindow):
         self.I2_buffer = []
         self.I3_buffer = []
 
-        self.plotGraphicsView.setBackground(setting.plot_color)
-        self.line1 = self.plotGraphicsView.plot(self.V1_buffer, skipFiniteCheck=True, pen=settings.line1_color)
-        self.line2 = self.plotGraphicsView.plot(self.V2_buffer, skipFiniteCheck=True, pen=settings.line2_color)
-        self.line3 = self.plotGraphicsView.plot(self.V3_buffer, skipFiniteCheck=True, pen=settings.line3_color)
-
+        self.plotGraphicsView.setBackground(settings.plot_background)
+        self.line1 = self.plotGraphicsView.plot(
+            self.V1_buffer, skipFiniteCheck=True, pen=settings.line1_color
+        )
+        self.line2 = self.plotGraphicsView.plot(
+            self.V2_buffer, skipFiniteCheck=True, pen=settings.line2_color
+        )
+        self.line3 = self.plotGraphicsView.plot(
+            self.V3_buffer, skipFiniteCheck=True, pen=settings.line3_color
+        )
 
         # -------------
         # QThread setup
         # -------------
         # Create worker objects
         self.server = TcpServer(
-                                V1_buffer=self.V1_buffer,
-                                V2_buffer=self.V2_buffer,
-                                V3_buffer=self.V3_buffer,
-                                I1_buffer=self.I1_buffer,
-                                I2_buffer=self.I2_buffer,
-                                I3_buffer=self.I3_buffer,
-                            )
+            V1_buffer=self.V1_buffer,
+            V2_buffer=self.V2_buffer,
+            V3_buffer=self.V3_buffer,
+            I1_buffer=self.I1_buffer,
+            I2_buffer=self.I2_buffer,
+            I3_buffer=self.I3_buffer,
+        )
 
         # Create QThread objects
         self.receiveThread = QThread()
@@ -81,7 +86,7 @@ class MainWindow(QMainWindow):
 
         self.line2.setData(self.V2_buffer)
         QApplication.processEvents()
-        
+
         self.line3.setData(self.V3_buffer)
         QApplication.processEvents()
 
