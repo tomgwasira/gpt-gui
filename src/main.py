@@ -9,6 +9,8 @@ import numpy as np
 
 from server import TcpServer
 
+import settings
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
