@@ -169,7 +169,6 @@ class MainWindow(QMainWindow):
         self.plotGraphicsView.getViewBox().scaleBy(zoom)
 
     def onHistoryButtonClicked(self, isChecked):
-
         combo_box_current_index = self.plotTypeComboBox.currentIndex()
 
         if combo_box_current_index == settings.V_combo_box_index:

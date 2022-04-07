@@ -130,7 +130,6 @@ class TcpServer(QObject):
 
                     # Lock to avoid plotting while indexes are being modified
                     self.mutex.lock()
-                    s = pg.ptime.time()
                     # Check trigger value
                     if V1_value > self.V1_trigger_value:
                         self.V1_upper_limit = len(self.V1_buffer)
@@ -168,8 +167,6 @@ class TcpServer(QObject):
                         if self.I3_lower_limit < 0:
                             self.I3_lower_limit = 0        
 
-                    e = pg.ptime.time()
-                    print(e-s)
                     self.mutex.unlock()
 
 
