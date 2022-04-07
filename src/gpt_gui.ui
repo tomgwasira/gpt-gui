@@ -17,7 +17,7 @@
    <widget class="QGroupBox" name="plotGroupBox">
     <property name="geometry">
      <rect>
-      <x>220</x>
+      <x>210</x>
       <y>0</y>
       <width>581</width>
       <height>361</height>
@@ -41,67 +41,122 @@
        <x>10</x>
        <y>30</y>
        <width>561</width>
-       <height>301</height>
+       <height>291</height>
       </rect>
      </property>
     </widget>
-    <widget class="QComboBox" name="plotTypeComboBox">
+    <widget class="QWidget" name="">
      <property name="geometry">
       <rect>
-       <x>425</x>
+       <x>450</x>
        <y>40</y>
-       <width>131</width>
+       <width>101</width>
+       <height>228</height>
+      </rect>
+     </property>
+     <layout class="QVBoxLayout" name="verticalLayout_2">
+      <property name="spacing">
+       <number>120</number>
+      </property>
+      <item>
+       <widget class="QComboBox" name="plotTypeComboBox">
+        <item>
+         <property name="text">
+          <string>Voltage</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Current</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="verticalLayout">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <item>
+         <widget class="QCheckBox" name="line1CheckBox">
+          <property name="enabled">
+           <bool>true</bool>
+          </property>
+          <property name="layoutDirection">
+           <enum>Qt::LeftToRight</enum>
+          </property>
+          <property name="text">
+           <string>Line 1</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="line2CheckBox">
+          <property name="text">
+           <string>Line 2</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QCheckBox" name="line3CheckBox">
+          <property name="text">
+           <string>Line 3</string>
+          </property>
+          <property name="checked">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+    <widget class="QPushButton" name="zoomInButton">
+     <property name="geometry">
+      <rect>
+       <x>100</x>
+       <y>330</y>
+       <width>89</width>
        <height>25</height>
       </rect>
      </property>
-     <item>
-      <property name="text">
-       <string>Voltage</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Current</string>
-      </property>
-     </item>
+     <property name="text">
+      <string>Zoom In</string>
+     </property>
     </widget>
-    <widget class="QCheckBox" name="line1CheckBox">
+    <widget class="QPushButton" name="zoomOutButton">
      <property name="geometry">
       <rect>
-       <x>430</x>
-       <y>230</y>
-       <width>112</width>
-       <height>23</height>
+       <x>190</x>
+       <y>330</y>
+       <width>89</width>
+       <height>25</height>
       </rect>
      </property>
      <property name="text">
-      <string>Line 1</string>
+      <string>Zoom Out</string>
      </property>
     </widget>
-    <widget class="QCheckBox" name="line2CheckBox">
+    <widget class="QPushButton" name="historyButton">
      <property name="geometry">
       <rect>
-       <x>430</x>
-       <y>260</y>
-       <width>112</width>
-       <height>23</height>
+       <x>10</x>
+       <y>330</y>
+       <width>89</width>
+       <height>25</height>
       </rect>
      </property>
      <property name="text">
-      <string>Line 2</string>
+      <string>History</string>
      </property>
-    </widget>
-    <widget class="QCheckBox" name="line3CheckBox">
-     <property name="geometry">
-      <rect>
-       <x>430</x>
-       <y>290</y>
-       <width>112</width>
-       <height>23</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Line 3</string>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
    </widget>
@@ -184,5 +239,127 @@
   </customwidget>
  </customwidgets>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>plotTypeComboBox</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onPlotTypeComboBoxSelect(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>720</x>
+     <y>75</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>historyButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onHistoryButtonClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>264</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomInButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomIn()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>354</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomOutButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomOut()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>444</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>line1CheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onLine1CheckBoxClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>710</x>
+     <y>222</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>line2CheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onLine2CheckBoxClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>710</x>
+     <y>247</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>line3CheckBox</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onLine3CheckBoxClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>710</x>
+     <y>272</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>onPlotTypeComboBoxSelect(int)</slot>
+  <slot>onHistoryButtonClicked(bool)</slot>
+  <slot>zoomIn()</slot>
+  <slot>zoomOut()</slot>
+  <slot>onLine1CheckBoxClicked(bool)</slot>
+  <slot>onLine2CheckBoxClicked(bool)</slot>
+  <slot>onLine3CheckBoxClicked(bool)</slot>
+ </slots>
 </ui>
