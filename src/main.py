@@ -158,14 +158,24 @@ class MainWindow(QMainWindow):
                     self.line3.setData([], [])
                 QApplication.processEvents()
 
-    def zoomIn(self):
+    def zoomInX(self):
         s = settings.zoom_amount
-        zoom = (s, s)
+        zoom = (s, 1)
         self.plotGraphicsView.getViewBox().scaleBy(zoom)
 
-    def zoomOut(self):
+    def zoomOutX(self):
         s = settings.zoom_amount
-        zoom = (1 / s, 1 / s)
+        zoom = (1 / s, 1)
+        self.plotGraphicsView.getViewBox().scaleBy(zoom)
+
+    def zoomInY(self):
+        s = settings.zoom_amount
+        zoom = (1, s)
+        self.plotGraphicsView.getViewBox().scaleBy(zoom)
+
+    def zoomOutY(self):
+        s = settings.zoom_amount
+        zoom = (1, 1 / s)
         self.plotGraphicsView.getViewBox().scaleBy(zoom)
 
     def onHistoryButtonClicked(self, isChecked):

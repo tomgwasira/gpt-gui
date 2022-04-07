@@ -117,7 +117,7 @@
       </item>
      </layout>
     </widget>
-    <widget class="QPushButton" name="zoomInButton">
+    <widget class="QPushButton" name="zoomInXButton">
      <property name="geometry">
       <rect>
        <x>100</x>
@@ -127,10 +127,10 @@
       </rect>
      </property>
      <property name="text">
-      <string>Zoom In</string>
+      <string>Zoom In x</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="zoomOutButton">
+    <widget class="QPushButton" name="zoomOutXButton">
      <property name="geometry">
       <rect>
        <x>190</x>
@@ -140,7 +140,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Zoom Out</string>
+      <string>Zoom Out x</string>
      </property>
     </widget>
     <widget class="QPushButton" name="historyButton">
@@ -157,6 +157,32 @@
      </property>
      <property name="checkable">
       <bool>true</bool>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="zoomInYButton">
+     <property name="geometry">
+      <rect>
+       <x>280</x>
+       <y>330</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Zoom In y</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="zoomOutYButton">
+     <property name="geometry">
+      <rect>
+       <x>370</x>
+       <y>330</y>
+       <width>89</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Zoom Out y</string>
      </property>
     </widget>
    </widget>
@@ -273,10 +299,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>zoomInButton</sender>
+   <sender>zoomInXButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>zoomIn()</slot>
+   <slot>zoomInX()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>354</x>
@@ -289,10 +315,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>zoomOutButton</sender>
+   <sender>zoomOutXButton</sender>
    <signal>clicked()</signal>
    <receiver>MainWindow</receiver>
-   <slot>zoomOut()</slot>
+   <slot>zoomOutX()</slot>
    <hints>
     <hint type="sourcelabel">
      <x>444</x>
@@ -352,14 +378,48 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>zoomOutYButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomOutY()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>624</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>zoomInYButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>zoomInY()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>534</x>
+     <y>364</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onPlotTypeComboBoxSelect(int)</slot>
   <slot>onHistoryButtonClicked(bool)</slot>
-  <slot>zoomIn()</slot>
-  <slot>zoomOut()</slot>
+  <slot>zoomInX()</slot>
+  <slot>zoomOutX()</slot>
   <slot>onLine1CheckBoxClickedHistoryPlot(bool)</slot>
   <slot>onLine2CheckBoxClickedHistoryPlot(bool)</slot>
   <slot>onLine3CheckBoxClickedHistoryPlot(bool)</slot>
+  <slot>zoomInY()</slot>
+  <slot>zoomOutY()</slot>
  </slots>
 </ui>
