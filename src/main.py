@@ -55,7 +55,14 @@ class MainWindow(QMainWindow):
         # QThread setup
         # -------------
         # Create worker objects
-        self.server = TcpServer()
+        self.server = TcpServer(
+                                inputGroup1DoubleSpinBox_1=self.inputGroup1DoubleSpinBox_1,
+                                inputGroup1DoubleSpinBox_2=self.inputGroup1DoubleSpinBox_2,
+                                inputGroup1DoubleSpinBox_3=self.inputGroup1DoubleSpinBox_3,
+                                inputGroup2DoubleSpinBox_1=self.inputGroup2DoubleSpinBox_1,
+                                inputGroup2DoubleSpinBox_2=self.inputGroup2DoubleSpinBox_2,
+                                inputGroup2DoubleSpinBox_3=self.inputGroup2DoubleSpinBox_3
+                            )
 
         # Create QThread objects
         self.receiveThread = QThread()

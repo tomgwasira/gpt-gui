@@ -24,7 +24,15 @@ import settings
 
 
 class TcpServer(QObject):
-    def __init__(self) -> None:
+    def __init__(
+                    self,
+                    inputGroup1DoubleSpinBox_1,
+                    inputGroup1DoubleSpinBox_2,
+                    inputGroup1DoubleSpinBox_3,
+                    inputGroup2DoubleSpinBox_1,
+                    inputGroup2DoubleSpinBox_2,
+                    inputGroup2DoubleSpinBox_3
+                ) -> None:
         super(QObject, self).__init__()
         self.buffer_len = 13  # number of elements in received TCP buffer
         self.buffer_size = (
@@ -66,6 +74,13 @@ class TcpServer(QObject):
         self.I3_upper_limit = 0
         self.I3_lower_limit = 0
 
+        self.inputGroup1DoubleSpinBox_1 = inputGroup1DoubleSpinBox_1
+        self.inputGroup1DoubleSpinBox_2 = inputGroup1DoubleSpinBox_2
+        self.inputGroup1DoubleSpinBox_3 = inputGroup1DoubleSpinBox_3
+        self.inputGroup2DoubleSpinBox_1 = inputGroup2DoubleSpinBox_1
+        self.inputGroup2DoubleSpinBox_2 = inputGroup2DoubleSpinBox_2
+        self.inputGroup2DoubleSpinBox_3 = inputGroup2DoubleSpinBox_3
+
     def run_server(self):
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((settings.HOST, settings.PORT))
@@ -81,12 +96,12 @@ class TcpServer(QObject):
                     # Additionally, Simulink block written for this program calls a blocking recv, so it
                     # will block if recv is called with no data sent.
                     double_list = [
-                        1.1,
-                        1.1,
-                        1.1,
-                        1.1,
-                        1.1,
-                        1.1,
+                        self.inputGroup1DoubleSpinBox_1.value(),
+                        self.inputGroup1DoubleSpinBox_2.value(),
+                        self.inputGroup1DoubleSpinBox_3.value(),
+                        self.inputGroup2DoubleSpinBox_1.value(),
+                        self.inputGroup2DoubleSpinBox_2.value(),
+                        self.inputGroup2DoubleSpinBox_3.value()
                     ]
                     data_to_send = struct.pack("6d", *double_list)
                     conn.sendall(data_to_send)
