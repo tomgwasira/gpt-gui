@@ -189,7 +189,7 @@
       <bool>true</bool>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton_3">
+    <widget class="QPushButton" name="measurementsButton">
      <property name="geometry">
       <rect>
        <x>210</x>
@@ -210,6 +210,9 @@
        <width>20</width>
        <height>20</height>
       </size>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
      </property>
     </widget>
     <widget class="QPushButton" name="zoomInYButton">
@@ -258,7 +261,7 @@
       </size>
      </property>
     </widget>
-    <widget class="QWidget" name="">
+    <widget class="QWidget" name="layoutWidget">
      <property name="geometry">
       <rect>
        <x>60</x>
@@ -272,21 +275,21 @@
        <number>0</number>
       </property>
       <item>
-       <widget class="QLabel" name="label">
+       <widget class="QLabel" name="channel1Measurements">
         <property name="text">
          <string>TextLabel</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="channel2Measurements">
         <property name="text">
          <string>TextLabel</string>
         </property>
        </widget>
       </item>
       <item>
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="channel3Measurements">
         <property name="text">
          <string>TextLabel</string>
         </property>
@@ -573,6 +576,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>measurementsButton</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>onMeasurementsButtonClicked(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>437</x>
+     <y>359</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>399</x>
+     <y>204</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>onPlotTypeComboBoxSelect(int)</slot>
@@ -584,5 +603,6 @@
   <slot>onLine3CheckBoxClickedHistoryPlot(bool)</slot>
   <slot>zoomInY()</slot>
   <slot>zoomOutY()</slot>
+  <slot>onMeasurementsButtonClicked(bool)</slot>
  </slots>
 </ui>
