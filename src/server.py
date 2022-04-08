@@ -1,4 +1,7 @@
-"""
+"""Tcp server implementation for General Power Theory GUI.
+
+The server is responsible for acquiring data that is plotted.
+
 To-do:
     * Check how quickly the client sends data and then profile how quickly the
         current server can run the whole while loop and then reconcile those times.
@@ -6,24 +9,23 @@ To-do:
         sends data first so if the client is using a block recv, the times will
         synchronise automatically (unless if using threads in the client).
 """
-
+# Standard library imports
 import socket
 import struct
+
+# Third-party library imports
+from PyQt5.QtCore import QMutex, QObject
 import pyqtgraph as pg
 
-from PyQt5.QtCore import QMutex, QObject
-
+# Local application imports
 import settings
 
-# class TcpServer(QObject):
-#     dataReadyToPlot = pyqtSignal()
-
-#     def receive(self):
-#         print("Receiving")
-#         self.dataReadyToPlot.emit()
-
-
 class TcpServer(QObject):
+    """Tcp server implementation.
+    
+    The server is responsible for acquiring and managing data that is
+    then plotted.
+    """
     def __init__(
                     self,
                     inputGroup1DoubleSpinBox_1,
@@ -34,9 +36,9 @@ class TcpServer(QObject):
                     inputGroup2DoubleSpinBox_3
                 ) -> None:
         super(QObject, self).__init__()
-        self.buffer_len = 13  # number of elements in received TCP buffer
-        self.buffer_size = (
-            self.buffer_len * 8
+        self.bufferLen = 13  # number of elements in received TCP buffer
+        self.bufferSize = (
+            self.bufferLen * 8
         )  # number of bytes in received TCP buffer. 8 because storing doubles.
 
         # ------------
@@ -44,33 +46,36 @@ class TcpServer(QObject):
         # ------------
         self.mutex = QMutex()
 
-        # Initialise shared memory for buffer
-        self.V1_buffer = []
-        self.V2_buffer = []
-        self.V3_buffer = []
-        self.I1_buffer = []
-        self.I2_buffer = []
-        self.I3_buffer = []
+        # ---------------
+        # Initialisations
+        # ---------------
+        self.debugBuffer = [] # buffer for use in debugging
+        self.v1Buffer = []
+        self.v2Buffer = []
+        self.v3Buffer = []
+        self.i1Buffer = []
+        self.i2Buffer = []
+        self.i3Buffer = []
 
-        self.V1_trigger_value = 0
-        self.V2_trigger_value = 0
-        self.V3_trigger_value = 0
-        self.I1_trigger_value = 0
-        self.I2_trigger_value = 0
-        self.I3_trigger_value = 0
+        self.v1TriggerValue = 0
+        self.v2TriggerValue = 0
+        self.v3TriggerValue = 0
+        self.i1TriggerValue = 0
+        self.i2TriggerValue = 0
+        self.i3TriggerValue = 0
 
-        self.V1_upper_limit = 0
-        self.V1_lower_limit = 0
-        self.V2_upper_limit = 0
-        self.V2_lower_limit = 0
-        self.V3_upper_limit = 0
-        self.V3_lower_limit = 0
-        self.I1_upper_limit = 0
-        self.I1_lower_limit = 0
-        self.I2_upper_limit = 0
-        self.I2_lower_limit = 0
-        self.I3_upper_limit = 0
-        self.I3_lower_limit = 0
+        self.v1UpperLimit = 0
+        self.v1LowerLimit = 0
+        self.v2UpperLimit = 0
+        self.v2LowerLimit = 0
+        self.v3UpperLimit = 0
+        self.v3LowerLimit = 0
+        self.i1UpperLimit = 0
+        self.i1LowerLimit = 0
+        self.i2UpperLimit = 0
+        self.i2LowerLimit = 0
+        self.i3UpperLimit = 0
+        self.i3LowerLimit = 0
 
         self.f0_V1 = 0
         self.f0_V2 = 0
@@ -86,7 +91,10 @@ class TcpServer(QObject):
         self.inputGroup2DoubleSpinBox_2 = inputGroup2DoubleSpinBox_2
         self.inputGroup2DoubleSpinBox_3 = inputGroup2DoubleSpinBox_3
 
-    def run_server(self):
+    def runServer(self):
+        """Listen for connections to a socket and if a client connects,
+        start receving data and writing it to buffers.
+        """
         with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.bind((settings.HOST, settings.PORT))
             s.listen()
@@ -100,7 +108,7 @@ class TcpServer(QObject):
                     # Always send first before recv incase some data to be received depends on sent data.
                     # Additionally, Simulink block written for this program calls a blocking recv, so it
                     # will block if recv is called with no data sent.
-                    double_list = [
+                    doubleList = [
                         self.inputGroup1DoubleSpinBox_1.value(),
                         self.inputGroup1DoubleSpinBox_2.value(),
                         self.inputGroup1DoubleSpinBox_3.value(),
@@ -108,37 +116,37 @@ class TcpServer(QObject):
                         self.inputGroup2DoubleSpinBox_2.value(),
                         self.inputGroup2DoubleSpinBox_3.value()
                     ]
-                    data_to_send = struct.pack("6d", *double_list)
-                    conn.sendall(data_to_send)
+                    dataToSend = struct.pack("6d", *doubleList)
+                    conn.sendall(dataToSend)
 
                     # ------------
                     # Data receive
                     # ------------
-                    size_to_read = self.buffer_size
+                    sizeToRead = self.bufferSize
                     data = b""
 
                     # Keep receiving until the expected buffer size has been read
-                    while size_to_read > 0:
-                        data = data + conn.recv(size_to_read)
-                        size_to_read -= len(data)
+                    while sizeToRead > 0:
+                        data = data + conn.recv(sizeToRead)
+                        sizeToRead -= len(data)
 
-                    data = struct.unpack((str(self.buffer_len) + "d"), data)
+                    data = struct.unpack((str(self.bufferLen) + "d"), data)
 
-                    V1_value = data[1]
-                    V2_value = data[2]
-                    V3_value = data[3]
-                    I1_value = data[4]
-                    I2_value = data[5]
-                    I3_value = data[6]
+                    v1Value = data[1]
+                    v2Value = data[2]
+                    v3Value = data[3]
+                    i1Value = data[4]
+                    i2Value = data[5]
+                    i3Value = data[6]
         
                     # Add received data to appropriate buffers
-                    # TODO: Deal with t_buffer inputs
-                    self.V1_buffer.append(V1_value)
-                    self.V2_buffer.append(data[2])
-                    self.V3_buffer.append(data[3])
-                    self.I1_buffer.append(data[4])
-                    self.I2_buffer.append(data[5])
-                    self.I3_buffer.append(data[6])
+                    self.debugBuffer.append(data[0])
+                    self.v1Buffer.append(v1Value)
+                    self.v2Buffer.append(v2Value)
+                    self.v3Buffer.append(v3Value)
+                    self.i1Buffer.append(i1Value)
+                    self.i2Buffer.append(i2Value)
+                    self.i3Buffer.append(i3Value)
 
                     self.f0_V1 = data[7]
                     self.f0_V2 = data[8]
@@ -148,106 +156,123 @@ class TcpServer(QObject):
                     self.f0_I3 = data[12]
 
                     # Reset plot limits. Must be done before triggering
-                    if len(self.V1_buffer) >= settings.nSamplesInView:
+                    if len(self.v1Buffer) >= settings.nSamplesInView:
                         self.mutex.lock()
-                        V1_buffer_len = len(self.V1_buffer)
-                        self.V1_upper_limit = V1_buffer_len
-                        self.V1_lower_limit = V1_buffer_len - settings.nSamplesInView
+                        v1BufferLen = len(self.v1Buffer)
+                        self.v1UpperLimit = v1BufferLen
+                        self.v1LowerLimit = v1BufferLen - settings.nSamplesInView
   
-                        V2_buffer_len = len(self.V2_buffer)
-                        self.V2_upper_limit = V2_buffer_len
-                        self.V2_lower_limit = V2_buffer_len - settings.nSamplesInView
+                        v2BufferLen = len(self.v2Buffer)
+                        self.v2UpperLimit = v2BufferLen
+                        self.v2LowerLimit = v2BufferLen - settings.nSamplesInView
 
-                        V3_buffer_len = len(self.V3_buffer)
-                        self.V3_upper_limit = V3_buffer_len
-                        self.V3_lower_limit = V3_buffer_len - settings.nSamplesInView
+                        v3BufferLen = len(self.v3Buffer)
+                        self.v3UpperLimit = v3BufferLen
+                        self.v3LowerLimit = v3BufferLen - settings.nSamplesInView
 
-                        I1_buffer_len = len(self.I1_buffer)
-                        self.I1_upper_limit = I1_buffer_len
-                        self.I1_lower_limit = I1_buffer_len - settings.nSamplesInView
+                        i1BufferLen = len(self.i1Buffer)
+                        self.i1UpperLimit = i1BufferLen
+                        self.i1LowerLimit = i1BufferLen - settings.nSamplesInView
 
-                        I2_buffer_len = len(self.I2_buffer)
-                        self.I2_upper_limit = I2_buffer_len
-                        self.I2_lower_limit = I2_buffer_len - settings.nSamplesInView
+                        i2BufferLen = len(self.i2Buffer)
+                        self.i2UpperLimit = i2BufferLen
+                        self.i2LowerLimit = i2BufferLen - settings.nSamplesInView
 
-                        I3_buffer_len = len(self.I3_buffer)
-                        self.I3_upper_limit = I3_buffer_len
-                        self.I3_lower_limit = I3_buffer_len - settings.nSamplesInView
+                        i3BufferLen = len(self.i3Buffer)
+                        self.i3UpperLimit = i3BufferLen
+                        self.i3LowerLimit = i3BufferLen - settings.nSamplesInView
                         self.mutex.unlock()
 
-                    self.trigger(V1_value, V2_value, V3_value, I1_value, I2_value, I3_value)
+                    # Run trigger function
+                    self.trigger(v1Value, v2Value, v3Value, i1Value, i2Value, i3Value)
 
-                    if len(self.V1_buffer) > settings.maxBufferLength:
+                    if len(self.v1Buffer) > settings.maxBufferLength:
                         self.clearBuffers()
 
-    def trigger(self, V1_value, V2_value, V3_value, I1_value, I2_value, I3_value):
-        # Lock to avoid plotting while indexes are being modified
+    def trigger(self, v1Value, v2Value, v3Value, i1Value, i2Value, i3Value):
+        """Determine the range of indexes to be plotted for each buffer
+        such that the moving signal can, somewhat, appear in the same
+        place. This is based on the triggering function of oscilloscopes.
+
+        This method is synchronized with the plotting using a mutex lock to
+        avoid plotting while the indexes are being modified.
+
+        Warning:
+            If data is not repeating, do not run trigger function as it will
+            not work.
+        """
         self.mutex.lock()
         # Check trigger value
-        if V1_value > self.V1_trigger_value:
-            self.V1_upper_limit = len(self.V1_buffer)
-            self.V1_lower_limit = self.V1_upper_limit - settings.nSamplesInView
-            if self.V1_lower_limit < 0:
-                self.V1_lower_limit = 0
+        if v1Value > self.v1TriggerValue:
+            self.v1UpperLimit = len(self.v1Buffer)
+            self.v1LowerLimit = self.v1UpperLimit - settings.nSamplesInView
+            if self.v1LowerLimit < 0:
+                self.v1LowerLimit = 0
 
-        if V2_value > self.V2_trigger_value:
-            self.V2_upper_limit = len(self.V2_buffer)
-            self.V2_lower_limit = self.V2_upper_limit - settings.nSamplesInView
-            if self.V2_lower_limit < 0:
-                self.V2_lower_limit = 0
+        if v2Value > self.v2TriggerValue:
+            self.v2UpperLimit = len(self.v2Buffer)
+            self.v2LowerLimit = self.v2UpperLimit - settings.nSamplesInView
+            if self.v2LowerLimit < 0:
+                self.v2LowerLimit = 0
 
-        if V3_value > self.V3_trigger_value:
-            self.V3_upper_limit = len(self.V3_buffer)
-            self.V3_lower_limit = self.V3_upper_limit - settings.nSamplesInView
-            if self.V3_lower_limit < 0:
-                self.V3_lower_limit = 0
+        if v3Value > self.v3TriggerValue:
+            self.v3UpperLimit = len(self.v3Buffer)
+            self.v3LowerLimit = self.v3UpperLimit - settings.nSamplesInView
+            if self.v3LowerLimit < 0:
+                self.v3LowerLimit = 0
 
-        if I1_value > self.I1_trigger_value:
-            self.I1_upper_limit = len(self.I1_buffer)
-            self.I1_lower_limit = self.I1_upper_limit - settings.nSamplesInView
-            if self.I1_lower_limit < 0:
-                self.I1_lower_limit = 0
+        if i1Value > self.i1TriggerValue:
+            self.i1UpperLimit = len(self.i1Buffer)
+            self.i1LowerLimit = self.i1UpperLimit - settings.nSamplesInView
+            if self.i1LowerLimit < 0:
+                self.i1LowerLimit = 0
 
-        if I2_value > self.I2_trigger_value:
-            self.I2_upper_limit = len(self.I2_buffer)
-            self.I2_lower_limit = self.I2_upper_limit - settings.nSamplesInView
-            if self.I2_lower_limit < 0:
-                self.I2_lower_limit = 0
+        if i2Value > self.i2TriggerValue:
+            self.i2UpperLimit = len(self.i2Buffer)
+            self.i2LowerLimit = self.i2UpperLimit - settings.nSamplesInView
+            if self.i2LowerLimit < 0:
+                self.i2LowerLimit = 0
 
-        if I3_value > self.I3_trigger_value:
-            self.I3_upper_limit = len(self.I3_buffer)
-            self.I3_lower_limit = self.I3_upper_limit - settings.nSamplesInView
-            if self.I3_lower_limit < 0:
-                self.I3_lower_limit = 0        
+        if i3Value > self.i3TriggerValue:
+            self.i3UpperLimit = len(self.i3Buffer)
+            self.i3LowerLimit = self.i3UpperLimit - settings.nSamplesInView
+            if self.i3LowerLimit < 0:
+                self.i3LowerLimit = 0        
 
         self.mutex.unlock()
     
     def clearBuffers(self):
+        """If buffers get too large, clear them an only leave the data
+        to be plotted in the current frame.
+        
+        This method is synchronized with the plotting using a mutex lock to
+        avoid plotting while the buffers are being modified.
+        """
         self.mutex.lock()
 
-        del self.V1_buffer[:self.V1_lower_limit]
-        self.V1_lower_limit = 0
-        self.V1_upper_limit = len(self.V1_buffer)
+        del self.v1Buffer[:self.v1LowerLimit]
+        self.v1LowerLimit = 0
+        self.v1UpperLimit = len(self.v1Buffer)
 
-        del self.V2_buffer[:self.V2_lower_limit]
-        self.V2_lower_limit = 0
-        self.V2_upper_limit = len(self.V2_buffer)
+        del self.v2Buffer[:self.v2LowerLimit]
+        self.v2LowerLimit = 0
+        self.v2UpperLimit = len(self.v2Buffer)
 
-        del self.V3_buffer[:self.V3_lower_limit]
-        self.V3_lower_limit = 0
-        self.V3_upper_limit = len(self.V3_buffer)
+        del self.v3Buffer[:self.v3LowerLimit]
+        self.v3LowerLimit = 0
+        self.v3UpperLimit = len(self.v3Buffer)
 
-        del self.I1_buffer[:self.I1_lower_limit]
-        self.I1_lower_limit = 0
-        self.I1_upper_limit = len(self.I1_buffer)
+        del self.i1Buffer[:self.i1LowerLimit]
+        self.i1LowerLimit = 0
+        self.i1UpperLimit = len(self.i1Buffer)
 
-        del self.I2_buffer[:self.I2_lower_limit]
-        self.I2_lower_limit = 0
-        self.I2_upper_limit = len(self.I2_buffer)
+        del self.i2Buffer[:self.i2LowerLimit]
+        self.i2LowerLimit = 0
+        self.i2UpperLimit = len(self.i2Buffer)
 
-        del self.I3_buffer[:self.I3_lower_limit]
-        self.I3_lower_limit = 0
-        self.I3_upper_limit = len(self.I3_buffer)
+        del self.i3Buffer[:self.i3LowerLimit]
+        self.i3LowerLimit = 0
+        self.i3UpperLimit = len(self.i3Buffer)
 
         self.mutex.unlock()
 
