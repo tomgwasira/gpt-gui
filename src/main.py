@@ -46,6 +46,10 @@ class MainWindow(QMainWindow):
             pen=pg.mkPen(settings.line3_color, width=settings.penWidth),
         )
 
+        # Disable autorange which causes the view to automatically auto-range whenever
+        # its contents are changed
+        # self.plotGraphicsView.disableAutoRange()
+
         # Scale axis to display correct values for each tick
         self.plotGraphicsView.getAxis("bottom").setScale(
             settings.axisScalingFactor
@@ -81,17 +85,31 @@ class MainWindow(QMainWindow):
         # ------------
         # Create timers
         self.plotTimer = QTimer()
+        self.measurementsTimer = QTimer()
 
         # Connect timer signals
         self.plotTimer.timeout.connect(self.update_plot)
+        self.measurementsTimer.timeout.connect(self.updateMeasurements)
 
         # Start timers
-        self.plotTimer.start(100)
+        self.plotTimer.start(setting.plotRefreshRate)
+        self.measurementsTimer.start(settings.measurementsRefreshRate)
 
         # --------------------
         # Emit initial signals
         # --------------------
         self.onPlotTypeComboBoxSelect(self.plotTypeComboBox.currentIndex())
+
+    def updateMeasurements(self):
+        if comboBoxCurrentIndex == settings.V_combo_box_index:
+            self.channel1Measurements.setText(f"f0_V1: {self.server.f0_V1} Hz")
+            self.channel2Measurements.setText(f"f0_V2: {self.server.f0_V2} Hz")
+            self.channel2Measurements.setText(f"f0_V3: {self.server.f0_V3} Hz")
+
+        elif comboBoxCurrentIndex == settings.I_combo_box_index:
+            self.channel1Measurements.setText(f"f0_I1: {self.server.f0_I1} Hz")
+            self.channel2Measurements.setText(f"f0_I2: {self.server.f0_I2} Hz")
+            self.channel2Measurements.setText(f"f0_I3: {self.server.f0_I3} Hz")
 
     def update_plot(self):
         # Process events after every plotting event to keep GUI responsive
@@ -201,26 +219,35 @@ class MainWindow(QMainWindow):
         self.plotGraphicsView.getViewBox().scaleBy(zoom)
 
     def onHistoryButtonClicked(self, isChecked):
+        # Before plotting, disable autoranging
+        if self.historyButton.isChecked():
+            self.plotGraphicsView.disableAutoRange()
+            self.server.mutex.lock()
+            self.plotGraphicsView.setXRange(len(self.server.V1_buffer)-settings.nSamplesInView, len(self.server.V1_buffer), padding=0)
+            self.server.mutex.unlock()
+        else:
+            self.plotGraphicsView.enableAutoRange()
+
         comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
 
         if comboBoxCurrentIndex == settings.V_combo_box_index:
             if isChecked == True:
                 if self.line1CheckBox.isChecked():
-                    self.line1.setData(self.server.V1_buffer)
+                    self.line1.setData(self.server.V1_buffer, clipToView=True)
                 else:
                     self.line1.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line2CheckBox.isChecked():
-                    self.line2.setData(self.server.V2_buffer)
+                    self.line2.setData(self.server.V2_buffer, clipToView=True)
                 else:
                     self.line2.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line3CheckBox.isChecked():
-                    self.line3.setData(self.server.V3_buffer)
+                    self.line3.setData(self.server.V3_buffer, clipToView=True)
                 else:
                     self.line3.clear()
                 QApplication.processEvents()
@@ -228,24 +255,27 @@ class MainWindow(QMainWindow):
         elif comboBoxCurrentIndex == settings.I_combo_box_index:
             if isChecked == True:
                 if self.line1CheckBox.isChecked():
-                    self.line1.setData(self.server.I1_buffer)
+                    self.line1.setData(self.server.I1_buffer, clipToView=True)
                 else:
                     self.line1.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line2CheckBox.isChecked():
-                    self.line2.setData(self.server.I2_buffer)
+                    self.line2.setData(self.server.I2_buffer, clipToView=True)
                 else:
                     self.line2.clear()
                 QApplication.processEvents()
 
             if isChecked == True:
                 if self.line3CheckBox.isChecked():
-                    self.line3.setData(self.server.I3_buffer)
+                    self.line3.setData(self.server.I3_buffer, clipToView=True)
                 else:
                     self.line3.clear()
                 QApplication.processEvents()
+
+            # Reset axis limits to avoid displaying too many points
+            # setXRange(5, 20, padding=0)
 
         # Let update_plot handle the else so that there is no race condition
 

@@ -1,5 +1,7 @@
 # Graphical User Interface Implementation for General Power Theory
 
+Trigger does not work on non-repeating signals
+
 ## Development
 ### Install PyQt5
 ```

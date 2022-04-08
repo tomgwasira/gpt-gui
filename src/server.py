@@ -52,8 +52,6 @@ class TcpServer(QObject):
         self.I2_buffer = []
         self.I3_buffer = []
 
-        self.n_samples_in_view = 100
-
         self.V1_trigger_value = 0
         self.V2_trigger_value = 0
         self.V3_trigger_value = 0
@@ -142,6 +140,34 @@ class TcpServer(QObject):
                     self.f0_I2 = data[11]
                     self.f0_I3 = data[12]
 
+                    # Reset plot limits. Must be done before triggering
+                    if len(self.V1_buffer) >= settings.nSamplesInView:
+                        self.mutex.lock()
+                        V1_buffer_len = len(self.V1_buffer)
+                        self.V1_upper_limit = V1_buffer_len
+                        self.V1_lower_limit = V1_buffer_len - settings.nSamplesInView
+  
+                        V2_buffer_len = len(self.V2_buffer)
+                        self.V2_upper_limit = V2_buffer_len
+                        self.V2_lower_limit = V2_buffer_len - settings.nSamplesInView
+
+                        V3_buffer_len = len(self.V3_buffer)
+                        self.V3_upper_limit = V3_buffer_len
+                        self.V3_lower_limit = V3_buffer_len - settings.nSamplesInView
+
+                        I1_buffer_len = len(self.I1_buffer)
+                        self.I1_upper_limit = I1_buffer_len
+                        self.I1_lower_limit = I1_buffer_len - settings.nSamplesInView
+
+                        I2_buffer_len = len(self.I2_buffer)
+                        self.I2_upper_limit = I2_buffer_len
+                        self.I2_lower_limit = I2_buffer_len - settings.nSamplesInView
+
+                        I3_buffer_len = len(self.I3_buffer)
+                        self.I3_upper_limit = I3_buffer_len
+                        self.I3_lower_limit = I3_buffer_len - settings.nSamplesInView
+                        self.mutex.unlock()
+
                     self.trigger(V1_value, V2_value, V3_value, I1_value, I2_value, I3_value)
 
                     if len(self.V1_buffer) > settings.maxBufferLength:
@@ -153,37 +179,37 @@ class TcpServer(QObject):
         # Check trigger value
         if V1_value > self.V1_trigger_value:
             self.V1_upper_limit = len(self.V1_buffer)
-            self.V1_lower_limit = self.V1_upper_limit - self.n_samples_in_view
+            self.V1_lower_limit = self.V1_upper_limit - settings.nSamplesInView
             if self.V1_lower_limit < 0:
                 self.V1_lower_limit = 0
 
         if V2_value > self.V2_trigger_value:
             self.V2_upper_limit = len(self.V2_buffer)
-            self.V2_lower_limit = self.V2_upper_limit - self.n_samples_in_view
+            self.V2_lower_limit = self.V2_upper_limit - settings.nSamplesInView
             if self.V2_lower_limit < 0:
                 self.V2_lower_limit = 0
 
         if V3_value > self.V3_trigger_value:
             self.V3_upper_limit = len(self.V3_buffer)
-            self.V3_lower_limit = self.V3_upper_limit - self.n_samples_in_view
+            self.V3_lower_limit = self.V3_upper_limit - settings.nSamplesInView
             if self.V3_lower_limit < 0:
                 self.V3_lower_limit = 0
 
         if I1_value > self.I1_trigger_value:
             self.I1_upper_limit = len(self.I1_buffer)
-            self.I1_lower_limit = self.I1_upper_limit - self.n_samples_in_view
+            self.I1_lower_limit = self.I1_upper_limit - settings.nSamplesInView
             if self.I1_lower_limit < 0:
                 self.I1_lower_limit = 0
 
         if I2_value > self.I2_trigger_value:
             self.I2_upper_limit = len(self.I2_buffer)
-            self.I2_lower_limit = self.I2_upper_limit - self.n_samples_in_view
+            self.I2_lower_limit = self.I2_upper_limit - settings.nSamplesInView
             if self.I2_lower_limit < 0:
                 self.I2_lower_limit = 0
 
         if I3_value > self.I3_trigger_value:
             self.I3_upper_limit = len(self.I3_buffer)
-            self.I3_lower_limit = self.I3_upper_limit - self.n_samples_in_view
+            self.I3_lower_limit = self.I3_upper_limit - settings.nSamplesInView
             if self.I3_lower_limit < 0:
                 self.I3_lower_limit = 0        
 

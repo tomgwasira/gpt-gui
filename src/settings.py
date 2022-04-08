@@ -9,6 +9,7 @@ line1_color = "b"
 line2_color = "#ff8c00"
 line3_color = "g"
 axisScalingFactor = 10  # value of axis scale. Depends on sample rate i.e. 1 sample = axisScalingFactor seconds.
+nSamplesInView = 100
 
 # Viewbox preferences
 zoom_amount = 0.75
@@ -19,3 +20,7 @@ I_combo_box_index = 1
 
 # Memory
 maxBufferLength = 10000
+
+# QTimer settings
+plotRefreshRate = 100
+measurementsRefreshRate = 2000
