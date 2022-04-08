@@ -72,6 +72,13 @@ class TcpServer(QObject):
         self.I3_upper_limit = 0
         self.I3_lower_limit = 0
 
+        self.f0_V1 = 0
+        self.f0_V2 = 0
+        self.f0_V3 = 0
+        self.f0_I1 = 0
+        self.f0_I2 = 0
+        self.f0_I3 = 0
+
         self.inputGroup1DoubleSpinBox_1 = inputGroup1DoubleSpinBox_1
         self.inputGroup1DoubleSpinBox_2 = inputGroup1DoubleSpinBox_2
         self.inputGroup1DoubleSpinBox_3 = inputGroup1DoubleSpinBox_3

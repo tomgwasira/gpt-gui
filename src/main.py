@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
         self.measurementsTimer.timeout.connect(self.updateMeasurements)
 
         # Start timers
-        self.plotTimer.start(setting.plotRefreshRate)
+        self.plotTimer.start(settings.plotRefreshRate)
         self.measurementsTimer.start(settings.measurementsRefreshRate)
 
         # --------------------
@@ -100,16 +100,28 @@ class MainWindow(QMainWindow):
         # --------------------
         self.onPlotTypeComboBoxSelect(self.plotTypeComboBox.currentIndex())
 
+    def onMeasurementsButtonClicked(self, isChecked):
+        if isChecked:
+            self.channel1Measurements.setHidden(False)
+            self.channel2Measurements.setHidden(False)
+            self.channel3Measurements.setHidden(False)
+
+        else:
+            self.channel1Measurements.setHidden(True)
+            self.channel2Measurements.setHidden(True)
+            self.channel3Measurements.setHidden(True)
+
     def updateMeasurements(self):
+        comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
         if comboBoxCurrentIndex == settings.V_combo_box_index:
-            self.channel1Measurements.setText(f"f0_V1: {self.server.f0_V1} Hz")
-            self.channel2Measurements.setText(f"f0_V2: {self.server.f0_V2} Hz")
-            self.channel2Measurements.setText(f"f0_V3: {self.server.f0_V3} Hz")
+            self.channel1Measurements.setText(f"f0_V1: {self.server.f0_V1:.3f} Hz")
+            self.channel2Measurements.setText(f"f0_V2: {self.server.f0_V2:.3f} Hz")
+            self.channel3Measurements.setText(f"f0_V3: {self.server.f0_V3:.3f} Hz")
 
         elif comboBoxCurrentIndex == settings.I_combo_box_index:
-            self.channel1Measurements.setText(f"f0_I1: {self.server.f0_I1} Hz")
-            self.channel2Measurements.setText(f"f0_I2: {self.server.f0_I2} Hz")
-            self.channel2Measurements.setText(f"f0_I3: {self.server.f0_I3} Hz")
+            self.channel1Measurements.setText(f"f0_I1: {self.server.f0_I1:.3f} Hz")
+            self.channel2Measurements.setText(f"f0_I2: {self.server.f0_I2:.3f} Hz")
+            self.channel3Measurements.setText(f"f0_I3: {self.server.f0_I3:.3f} Hz")
 
     def update_plot(self):
         # Process events after every plotting event to keep GUI responsive
