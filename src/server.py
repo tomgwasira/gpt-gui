@@ -141,6 +141,7 @@ class TcpServer(QObject):
         
                     # Add received data to appropriate buffers
                     self.debugBuffer.append(data[0])
+                    # print(data[0])
                     self.v1Buffer.append(v1Value)
                     self.v2Buffer.append(v2Value)
                     self.v3Buffer.append(v3Value)

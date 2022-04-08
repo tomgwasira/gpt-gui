@@ -8,7 +8,7 @@ plotBackground = "w"
 line1Color = "b"
 line2Color = "#ff8c00"
 line3Color = "g"
-axisScalingFactor = 10  # value of axis scale. Depends on sample rate i.e. 1 sample = axisScalingFactor seconds.
+axisScalingFactor = 0.001  # value of axis scale. Depends on sample rate i.e. 1 sample = axisScalingFactor seconds.
 nSamplesInView = 100
 
 # Viewbox preferences

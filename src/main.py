@@ -111,6 +111,11 @@ class MainWindow(QMainWindow):
         # ----------------------
         self.onPlotTypeComboBoxSelect(self.plotTypeComboBox.currentIndex())
 
+        # Hide plot measurements
+        self.channel1Measurements.setHidden(True)
+        self.channel2Measurements.setHidden(True)
+        self.channel3Measurements.setHidden(True)
+
     def updatePlot(self):
         """Update plot widget.
 
@@ -257,6 +262,9 @@ class MainWindow(QMainWindow):
         else:
             # Re-enable autorange if history button unchecked
             self.plotGraphicsView.enableAutoRange()
+            self.line1.clear()
+            self.line2.clear()
+            self.line3.clear()
 
         comboBoxCurrentIndex = self.plotTypeComboBox.currentIndex()
 
