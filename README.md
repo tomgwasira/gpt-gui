@@ -33,6 +33,7 @@ pip3 install pyinstaller
 
 ```
 python3 -m PyInstaller script.py -F --i icon.png -noconsole
+python3 -m PyInstaller --clean --onefile --icon=icon.ico main.py
 
 ## About the Project
 Qt is overall superior to Gtk in terms of flexibility. It allows much more control over style, font sizes etc. Group boxes etc. are so powerful, using Gtk is caveman vibes.

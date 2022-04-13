@@ -57,12 +57,12 @@ class TcpServer(QObject):
         self.i2Buffer = []
         self.i3Buffer = []
 
-        self.v1TriggerValue = 0
-        self.v2TriggerValue = 0
-        self.v3TriggerValue = 0
-        self.i1TriggerValue = 0
-        self.i2TriggerValue = 0
-        self.i3TriggerValue = 0
+        self.v1TriggerValue = -1
+        self.v2TriggerValue = -1
+        self.v3TriggerValue = -1
+        self.i1TriggerValue = -1
+        self.i2TriggerValue = -1
+        self.i3TriggerValue = -1
 
         self.v1UpperLimit = 0
         self.v1LowerLimit = 0
@@ -139,9 +139,10 @@ class TcpServer(QObject):
                     i2Value = data[5]
                     i3Value = data[6]
         
+                    # print(data[0])
+
                     # Add received data to appropriate buffers
                     self.debugBuffer.append(data[0])
-                    # print(data[0])
                     self.v1Buffer.append(v1Value)
                     self.v2Buffer.append(v2Value)
                     self.v3Buffer.append(v3Value)
@@ -156,41 +157,13 @@ class TcpServer(QObject):
                     self.f0_I2 = data[11]
                     self.f0_I3 = data[12]
 
-                    # Reset plot limits. Must be done before triggering
-                    if len(self.v1Buffer) >= settings.nSamplesInView:
-                        self.mutex.lock()
-                        v1BufferLen = len(self.v1Buffer)
-                        self.v1UpperLimit = v1BufferLen
-                        self.v1LowerLimit = v1BufferLen - settings.nSamplesInView
-  
-                        v2BufferLen = len(self.v2Buffer)
-                        self.v2UpperLimit = v2BufferLen
-                        self.v2LowerLimit = v2BufferLen - settings.nSamplesInView
-
-                        v3BufferLen = len(self.v3Buffer)
-                        self.v3UpperLimit = v3BufferLen
-                        self.v3LowerLimit = v3BufferLen - settings.nSamplesInView
-
-                        i1BufferLen = len(self.i1Buffer)
-                        self.i1UpperLimit = i1BufferLen
-                        self.i1LowerLimit = i1BufferLen - settings.nSamplesInView
-
-                        i2BufferLen = len(self.i2Buffer)
-                        self.i2UpperLimit = i2BufferLen
-                        self.i2LowerLimit = i2BufferLen - settings.nSamplesInView
-
-                        i3BufferLen = len(self.i3Buffer)
-                        self.i3UpperLimit = i3BufferLen
-                        self.i3LowerLimit = i3BufferLen - settings.nSamplesInView
-                        self.mutex.unlock()
-
                     # Run trigger function
-                    self.trigger(v1Value, v2Value, v3Value, i1Value, i2Value, i3Value)
+                    self.computeTriggeredPlotRanges(v1Value, v2Value, v3Value, i1Value, i2Value, i3Value)
 
                     if len(self.v1Buffer) > settings.maxBufferLength:
                         self.clearBuffers()
 
-    def trigger(self, v1Value, v2Value, v3Value, i1Value, i2Value, i3Value):
+    def computeTriggeredPlotRanges(self, v1Value, v2Value, v3Value, i1Value, i2Value, i3Value):
         """Determine the range of indexes to be plotted for each buffer
         such that the moving signal can, somewhat, appear in the same
         place. This is based on the triggering function of oscilloscopes.
@@ -242,6 +215,35 @@ class TcpServer(QObject):
 
         self.mutex.unlock()
     
+    def computeNonTriggeredPlotRanges(self):
+        """Compute plot ranges for non-triggered (i.e. non-repeating) channels."""
+        if len(self.v1Buffer) >= settings.nSamplesInView:
+            self.mutex.lock()
+            v1BufferLen = len(self.v1Buffer)
+            self.v1UpperLimit = v1BufferLen
+            self.v1LowerLimit = v1BufferLen - settings.nSamplesInView
+
+            # v2BufferLen = len(self.v2Buffer)
+            # self.v2UpperLimit = v2BufferLen
+            # self.v2LowerLimit = v2BufferLen - settings.nSamplesInView
+
+            # v3BufferLen = len(self.v3Buffer)
+            # self.v3UpperLimit = v3BufferLen
+            # self.v3LowerLimit = v3BufferLen - settings.nSamplesInView
+
+            # i1BufferLen = len(self.i1Buffer)
+            # self.i1UpperLimit = i1BufferLen
+            # self.i1LowerLimit = i1BufferLen - settings.nSamplesInView
+
+            # i2BufferLen = len(self.i2Buffer)
+            # self.i2UpperLimit = i2BufferLen
+            # self.i2LowerLimit = i2BufferLen - settings.nSamplesInView
+
+            # i3BufferLen = len(self.i3Buffer)
+            # self.i3UpperLimit = i3BufferLen
+            # self.i3LowerLimit = i3BufferLen - settings.nSamplesInView
+            # self.mutex.unlock()
+
     def clearBuffers(self):
         """If buffers get too large, clear them an only leave the data
         to be plotted in the current frame.
